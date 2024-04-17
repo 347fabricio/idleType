@@ -24,40 +24,30 @@
       </div>
 
       <div class="store">
-        <div class="upgrades">
-          <div id="0" class="boxUpgrade keyboardUpgrade" onclick="buyUpgrade(this, id)">
-            <img src="assets/keyboard.png" alt="Keyboard" />
-          </div>
-          <div id="1" class="boxUpgrade keyboardUpgrade" onclick="buyUpgrade(this, id)">
-            <img src="assets/keyboard.png" alt="Keyboard" />
-          </div>
-          <div id="2" class="boxUpgrade keyboardUpgrade" onclick="buyUpgrade(this, id)">
-            <img src="assets/keyboard.png" alt="Keyboard" />
-          </div>
+        <div class="upgrades-store">
+          <div class="upgrades"></div>
         </div>
 
         <div class="products">
-          <div id="0" class="product" onclick="buyKeyboard(this, id)">
-            <div class="store-item">Keyboard</div>
+          <div id="0" class="product">
+            <div>Keyboard</div>
             <div class="upgrade">
               <img src="assets/keyboard.png" alt="Teclado" />
               <span id="0" class="product-price"></span>
             </div>
           </div>
-
-          <div id="1" class="product" onclick="buyWriter(this, id)">
-            <div class="store-item">Writer</div>
+          <div id="1" class="product">
+            <div>Assistant</div>
             <div class="upgrade">
               <img src="assets/keyboard.png" alt="Teclado" />
               <span id="1" class="product-price"></span>
             </div>
           </div>
-
-          <div class="product"></div>
           <div class="product"></div>
         </div>
       </div>
     </main>
   </body>
-  <script src="script.js"></script>
+
+  <script src="script.js" type="module"></script>
 </html>
