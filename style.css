@@ -78,19 +78,19 @@ input:focus {
 .money-per-second span {
   display: flex;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .upgrades-store {
   display: flex;
   min-height: 72px;
   gap: 2px;
-  padding: 8px;
   background-color: #0c0c0c;
   -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
   border-radius: 8px;
+  padding: 8px;
 }
 
 .upgrades {
@@ -159,14 +159,8 @@ input:focus {
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-
   gap: 2px;
-  font-size: 12px;
-}
-
-.upgrade img {
-  height: 22px;
-  width: 22px;
+  font-size: 14px;
 }
 
 .product:hover,
@@ -179,4 +173,68 @@ input:focus {
 
 .disabled {
   opacity: 0;
+}
+
+.tooltip-product {
+  visibility: hidden;
+  position: absolute;
+  background-color: #2d2d2d;
+  border-radius: 4px;
+  font-size: 14px;
+  /* width: 160px; */
+  /* height: 40px; */
+  padding: 6px 8px;
+  margin-left: -5px;
+  margin-bottom: 70px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tooltip-upgrade {
+  visibility: hidden;
+  position: absolute;
+  width: 80px;
+  color: white;
+  font-size: 14px;
+  background-color: #2d2d2d;
+  border-radius: 4px;
+  padding: 10px 15px 10px 34px;
+  margin-bottom: 100px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background-image: url(./assets/keyboard.png);
+  background-repeat: no-repeat;
+  background-position: 4px 2px;
+  background-size: 26px;
+}
+
+.boxUpgrade:hover .tooltip-upgrade {
+  visibility: visible;
+  opacity: 1;
+}
+
+.product:hover {
+  .tooltip-product {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+ul#prolist {
+  display: none;
+  list-style-position: inside;
+}
+
+ul li::marker {
+  font-size: 16px;
+}
+
+li.item {
+  font-size: 14px;
+  padding: 2px 0;
+}
+
+.item > span {
+  position: relative;
+  left: -12px;
 }
