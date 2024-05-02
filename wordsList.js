@@ -1,3 +1,11 @@
+export let word = document.querySelector("#word-here");
+export let input = document.querySelector("#type-here");
+
+export const start = () => {
+  input.value = "";
+  word.innerHTML = wordList[Math.floor(Math.random() * wordList.length)];
+};
+
 export const wordList = [
   "ability",
   "able",

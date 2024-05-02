@@ -14,7 +14,8 @@ main {
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
-  height: 95vh;
+  padding-bottom: 30px;
+  height: 100vh;
 }
 
 .tega {
@@ -34,7 +35,15 @@ main {
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
 }
 
+#word-here {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 33%;
+}
+
 input {
+  display: flex;
   background-color: #111111;
   border-radius: 6px;
   text-align: center;
@@ -56,6 +65,59 @@ input:focus {
   -webkit-box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
   -moz-box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
   box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
+}
+
+.auto-keyboard {
+  position: relative;
+}
+
+.auto-keyboard > img {
+  opacity: 0.1;
+  cursor: pointer;
+}
+
+.auto-keyboard > .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333333;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 4px;
+  position: absolute;
+  z-index: 1;
+  top: -5%;
+  left: 125%;
+  margin-left: -15px;
+  margin-top: 25px;
+  opacity: 0;
+}
+
+.auto-keyboard > .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #222222 transparent transparent;
+}
+
+.auto-keyboard > img:hover {
+  opacity: 0.4;
+}
+
+.auto-keyboard:hover .tooltiptext {
+  visibility: visible;
+  transition-duration: 0.2s;
+  transition-delay: 0.5s;
+  opacity: 1;
+}
+
+.auto-keyboard:active {
+  transform: translateY(2px);
 }
 
 .money {
