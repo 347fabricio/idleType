@@ -10,8 +10,4 @@ I'm not an experienced programmer, I'm learning a lot of making these things. If
 
 All the credits are for **[Orteil](https://orteil.dashnet.org/)**.
 
-The mathematics algorithms were taken from his **[Wiki.](https://cookieclicker.fandom.com/wiki/Cookie_Clicker_Wiki)**
-
-**[Here if you want to support him.](https://www.patreon.com/dashnet)**
-
 Thanks for reading!

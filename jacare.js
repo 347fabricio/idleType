@@ -5,7 +5,10 @@ export let productPrice = document.querySelectorAll(".product-price");
 export const updateProductPrice = () => {
   for (let i = 0; i < productPrice.length; i++) {
     if (productPrice[i].innerText != storeProducts[i].cost) {
-      productPrice[i].innerText = storeProducts[i].cost.toLocaleString();
+      productPrice[i].innerText = storeProducts[i].cost.toLocaleString("en-US", {
+        notation: "compact",
+        compactDisplay: "long",
+      });
     }
   }
 };
@@ -24,16 +27,13 @@ export const getQuantityPerSecond = () => {
   return sum;
 };
 
-export const produced = () => {
-  let sum = 0;
-
+export const produced = (productIndex) => {
   for (let i = 0; i < storeProducts.length; i++) {
     storeProducts[i].produced += storeProducts[i].quantityPerSecond;
   }
-
-  return sum;
 };
 
+let enable = new Array();
 export const productTooltip = (productIndex) => {
   let span = document.querySelectorAll("#prolist")[productIndex];
 
@@ -43,13 +43,48 @@ export const productTooltip = (productIndex) => {
     document.querySelectorAll("#prolist")[productIndex].style.display = "block";
   }
 
-  (() => {
-    span.querySelectorAll("li > span")[0].innerText = `each ${
-      storeProducts[productIndex].name
-    } produces ${storeProducts[productIndex].multiplier.toFixed(1)}`;
-    span.querySelectorAll("li > span")[1].innerText = `${storeProducts[productIndex].own} ${
-      storeProducts[productIndex].name
-    } are producing ${storeProducts[productIndex].quantityPerSecond.toFixed(1)}`;
-  })();
+  span.querySelectorAll("li > span")[0].innerText = `each produces ${isInTheMillions(productIndex, "multiplier")}`;
+
+  span.querySelectorAll("li > span")[1].innerText = `${storeProducts[productIndex].own} ${checkPlurality(
+    productIndex
+  )} producing ${isInTheMillions(productIndex, "qntPerSec")}`;
+
+  if (!span.querySelectorAll("li > span")[2].classList.contains("active")) {
+    span.querySelectorAll("li > span")[2].innerText = `0 keyboards so far`;
+    span.querySelectorAll("li > span")[2].setAttribute("class", "active");
+
+    setInterval(() => {
+      span.querySelectorAll("li > span")[2].innerText = `${isInTheMillions(productIndex, "produced")} keyboards so far`;
+    }, 1000);
+  }
 };
-let enable = new Array();
+
+const checkPlurality = (productIndex) => {
+  return storeProducts[productIndex].own != 1 ? "are" : "is";
+};
+
+const isInTheMillions = (productIndex, what) => {
+  const produced = storeProducts[productIndex].produced;
+  const qntPerSec = storeProducts[productIndex].quantityPerSecond;
+  const multiplier = storeProducts[productIndex].multiplier;
+
+  if (what == "produced") {
+    return doIt(produced);
+  } else if (what == "qntPerSec") {
+    return doIt(qntPerSec);
+  } else {
+    return doIt(multiplier);
+  }
+};
+
+export const doIt = (_) => {
+  if (_ >= 1000000) {
+    const formattedNumber = _.toLocaleString("en-US", {
+      notation: "compact",
+      compactDisplay: "long",
+    });
+    return formattedNumber;
+  } else {
+    return _.toLocaleString();
+  }
+};
