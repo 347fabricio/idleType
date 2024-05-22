@@ -13,7 +13,7 @@ export const updateProductPrice = () => {
   }
 };
 
-export const getTax = (x, y) => {
+export const getTax = (_, y) => {
   storeProducts[y].cost = Math.ceil(storeProducts[y].baseCost * Math.pow(1.15, storeProducts[y].own));
 };
 
