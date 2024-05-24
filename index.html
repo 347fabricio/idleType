@@ -10,9 +10,12 @@
     <main>
       <div id="money" class="money">
         <div class="total-money">
-          <img src="assets/keyboard.png" alt="Teclado" class="keyboard" />
+          <img src="assets/keyboard.png" alt="Keyboard" class="keyboard" />
           <span id="money-quantity" class="money-quantity">0</span>
-          <div class="keyboardEarned">+10</div>
+          <div class="keyboardEarned"></div>
+          <div class="save">
+            <img src="assets/save.png" alt="Save" />
+          </div>
         </div>
         <div id="money-per-second" class="money-per-second disabled">
           <span>money/second: 0</span>
@@ -169,6 +172,22 @@
         </div>
       </div>
     </main>
+
+    <div class="options" id="options">
+      <div class="saveBtn">
+        <button title="It'll save your game.">Save</button>
+      </div>
+      <div class="expImp">
+        <button title="It'll export your game data.">Export save</button>
+        <button title="It'll import your game data.">Import save</button>
+      </div>
+      <div class="download">
+        <button title="It'll download your game data.">Save to file</button>
+        <button title="It'll upload your game data.">Import from file</button>
+      </div>
+    </div>
+
+    <div class="notes"></div>
   </body>
 
   <script src="script.js" type="module"></script>
