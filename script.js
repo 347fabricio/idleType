@@ -1,8 +1,19 @@
 import { start, word, input } from "./wordsList.js";
 import { updateProductPrice, getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
-import { options } from "./options.js";
+import { options, exit, prompt } from "./options.js";
 
 options();
+document.querySelector("#exit").addEventListener("click", exit);
+
+document.querySelector(".save").addEventListener("click", () => {
+  saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
+}); // fix it
+
+document.querySelectorAll("#fodase").forEach((button, index) => {
+  button.addEventListener("click", () => {
+    prompt();
+  });
+});
 
 export let storeProducts = [
   {
@@ -28,7 +39,6 @@ export let storeProducts = [
   },
   {
     name: "coffeeMachines",
-    quantity: 0,
     quantityPerSecond: 0,
     multiplier: 8,
     level: 0,
@@ -39,7 +49,6 @@ export let storeProducts = [
   },
   {
     name: "ergonomicChairs",
-    quantity: 0,
     quantityPerSecond: 0,
     multiplier: 47,
     level: 0,
@@ -50,7 +59,6 @@ export let storeProducts = [
   },
   {
     name: "textEditor",
-    quantity: 0,
     quantityPerSecond: 0,
     multiplier: 260,
     level: 0,
@@ -61,7 +69,6 @@ export let storeProducts = [
   },
   {
     name: "speechToText",
-    quantity: 0,
     quantityPerSecond: 0,
     multiplier: 1400,
     level: 0,
@@ -744,18 +751,18 @@ const loadDataFromLocalStorage = () => {
   const data = JSON.parse(localStorage.getItem("my"));
 
   if (data) {
-    console.log("load: ", data);
+    // console.log("load: ", data);
     storeProducts = data[0];
     upgradesList = data[1];
-    keyboards = data[2];
-    acc = data[3];
-    document.querySelector(".upgrades").outerHTML = data[4];
+    acc = data[2];
+    document.querySelector(".upgrades").outerHTML = data[3];
+    keyboards = data[4];
     showKeyboards.innerText = doIt(keyboards);
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
     updateProductPrice();
     xxt();
 
-    setEvents(data[3]);
+    setEvents();
   }
 };
 
@@ -763,18 +770,8 @@ setTimeout(loadDataFromLocalStorage(), 0);
 
 let upgrades = document.querySelector(".upgrades");
 
-document.querySelector(".saveBtn  button").addEventListener("click", () => {
-  const notes = document.querySelector(".notes");
-
-  notes.textContent = "Saved";
-  notes.classList.add("saved");
-
-  setTimeout(() => notes.classList.remove("saved"), 2000);
-  saveDataToLocalStorage([storeProducts, upgradesList, keyboards, acc, upgrades.outerHTML]);
-});
-
 setInterval(() => {
-  saveDataToLocalStorage([storeProducts, upgradesList, keyboards, acc, upgrades.outerHTML]);
+  saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
 }, 45000);
 
 // localStorage upgrades handlers
