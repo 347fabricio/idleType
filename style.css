@@ -490,7 +490,7 @@ li.item {
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  width: 60%;
+  width: 75%;
   border-bottom: 1px solid #333333;
   letter-spacing: 0.1rem;
 }

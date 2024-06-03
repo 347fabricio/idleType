@@ -5,13 +5,15 @@ import { options, exit, prompt } from "./options.js";
 options();
 document.querySelector("#exit").addEventListener("click", exit);
 
-document.querySelector(".save").addEventListener("click", () => {
-  saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
-}); // fix it
-
 document.querySelectorAll("#fodase").forEach((button, index) => {
   button.addEventListener("click", () => {
-    prompt();
+    if (index == 0) {
+      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
+      console.log("saved");
+    } else {
+      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
+      prompt(index);
+    }
   });
 });
 

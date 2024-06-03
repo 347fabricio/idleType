@@ -6,7 +6,6 @@ const showHideMain = () => {
 
   optionsElement.style.visibility = mainToggle ? "visible" : "hidden";
   bgOpacity.style.filter = mainToggle ? "blur(3px)" : "";
-  // bgOpacity.style.opacity = mainToggle ? "0.6" : "";
 
   mainToggle = !mainToggle;
 };
@@ -27,29 +26,26 @@ const showHideOptions = () => {
   const optionsElement = document.querySelector("#options");
 
   optionsElement.style.filter = optionsToggle ? "blur(2px)" : "";
-  // optionsElement.style.opacity = optionsToggle ? "0.8" : "";
 
   optionsToggle = !optionsToggle;
 };
 
-export const prompt = () => {
+export const prompt = (index) => {
   showHideOptions();
 
   const div = document.createElement("div");
   const promptBtnDiv = document.createElement("div");
   const h3 = document.createElement("h3");
   const textArea = document.createElement("textarea");
-  const button = document.createElement("button");
+  const doBtn = document.createElement("button");
   const exitBtn = document.createElement("button");
 
-  h3.innerText = "EXPORT SAVE";
-  button.innerText = "Done";
   exitBtn.innerText = "Exit";
 
-  promptBtnDiv.appendChild(button);
+  promptBtnDiv.appendChild(doBtn);
   promptBtnDiv.appendChild(exitBtn);
   textArea.classList.add("promptTextArea");
-  button.classList.add("doneBtn");
+  doBtn.classList.add("doBtn");
   exitBtn.classList.add("exitBtn");
   promptBtnDiv.classList.add("promptBtnDiv");
 
@@ -62,19 +58,68 @@ export const prompt = () => {
   document.querySelector("body").append(div);
 
   exitBtn.addEventListener("click", exitButton);
-  document.querySelector(".promptTextArea").innerText = objJsonB64;
+
+  switch (index) {
+    case 1:
+      getSave();
+      exportSave();
+      copyButton();
+      break;
+    case 2:
+      importSave();
+      break;
+    case 3:
+      h3.innerText = "SAVE TO FILE";
+      console.log(index);
+      break;
+    case 4:
+      h3.innerText = "IMPORT FROM FILE";
+      console.log(index);
+      break;
+  }
+};
+
+// exp / imp -----------------------------------------------
+const copyButton = () => {
+  let copyBtn = document.querySelector(".promptTextArea");
+  navigator.clipboard.writeText(copyBtn.value);
 };
 
 const exitButton = () => {
-  console.log("closing imports/exports");
   document.querySelector("#prompt").remove();
-
   showHideOptions();
 };
 
-const importSave = () => {};
+const exportSave = () => {
+  document.querySelector(".doBtn").innerText = "Copy";
+  document.querySelector(".prompt > h3").innerText = "EXPORT SAVE";
+  document.querySelector(".promptTextArea").innerText = jsonToBase64(save);
+};
+
+const importSave = () => {
+  document.querySelector(".doBtn").innerText = "Done";
+  document.querySelector(".prompt > h3").innerText = "IMPORT SAVE";
+  document.querySelector(".doBtn").addEventListener("click", () => {
+    const b64 = document.querySelector(".promptTextArea").value;
+    const b64Decoded = JSON.parse(atob(b64));
+
+    try {
+      localStorage.setItem("my", JSON.stringify(b64Decoded));
+      location.reload();
+    } catch {
+      document.querySelector(".promptTextArea").innerText = "paste something...";
+    }
+  });
+};
+
+// -------------------------------------
 
 let save = JSON.parse(localStorage.getItem("my")) || 0;
+
+const getSave = () => {
+  save = JSON.parse(localStorage.getItem("my"));
+  return jsonToBase64(save);
+};
 
 const setBool = () => {
   for (let i = 0; i < save[1].length; i++) {
@@ -104,7 +149,3 @@ function jsonToBase64(object) {
   const json = JSON.stringify(object);
   return btoa(json);
 }
-
-let objJsonB64 = jsonToBase64(save);
-
-// console.log(objJsonB64);
