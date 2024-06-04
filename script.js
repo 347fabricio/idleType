@@ -2,21 +2,6 @@ import { start, word, input } from "./wordsList.js";
 import { updateProductPrice, getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
 import { options, exit, prompt } from "./options.js";
 
-options();
-document.querySelector("#exit").addEventListener("click", exit);
-
-document.querySelectorAll("#fodase").forEach((button, index) => {
-  button.addEventListener("click", () => {
-    if (index == 0) {
-      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
-      console.log("saved");
-    } else {
-      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
-      prompt(index);
-    }
-  });
-});
-
 export let storeProducts = [
   {
     name: "keyboard",
@@ -81,11 +66,81 @@ export let storeProducts = [
   },
 ];
 
+let upgradesList = [
+  {
+    name: "keyboard",
+    chorume: [2, 2, 2],
+    currentMultiplier: 0.1,
+    multiplier: [5, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20],
+    upgradeCost: [80, 400, 8000, 80000, 8000000, 800000000],
+  },
+  {
+    name: "assistant",
+    chorume: [2, 2, 2, 2, 2],
+    upgradeCost: [800, 4000, 40000, 4000000, 400000000],
+  },
+  {
+    name: "coffeeMachines",
+    chorume: [2, 2, 2, 2],
+    upgradeCost: [8800, 44000, 444000, 44000000],
+  },
+  {
+    name: "ergonomicChairs",
+    chorume: [2, 2, 2, 2],
+    upgradeCost: [120000, 600000, 6000000, 600000000],
+  },
+  {
+    name: "textEditor",
+    chorume: [2, 2, 2],
+    upgradeCost: [1040000, 5200000, 52000000],
+  },
+  {
+    name: "speechToText",
+    chorume: [2, 2, 2],
+    upgradeCost: [11200000, 56000000, 560000000],
+  },
+  {
+    name: "writing",
+    chorume: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    upgradeCost: [40000, 4000000, 400000000, 40000000000, 4000000000000],
+  },
+];
+
+let acc = [
+  {
+    id: 0,
+    dataid: 0,
+  },
+  {
+    id: 0,
+    dataid: 16,
+  },
+  {
+    id: 0,
+    dataid: 22,
+  },
+  {
+    id: 0,
+    dataid: 28,
+  },
+  {
+    id: 0,
+    dataid: 34,
+  },
+  {
+    id: 0,
+    dataid: 40,
+  },
+];
+
+// ================ START ================
 start();
 updateProductPrice();
+
+// ================ KEYBOARDS EARNED BY TYPING ================
 const message = document.querySelector(".keyboardEarned");
 
-const goUp = (x) => {
+const showEarnings = (x) => {
   !x ? (x = storeProducts[0].quantity) : x;
 
   message.innerText = `+ ${doIt(x)}`;
@@ -99,6 +154,7 @@ const goUp = (x) => {
   }, 200);
 };
 
+// ================ USER TYPING ================
 let answer = "";
 
 const getUserInput = () => {
@@ -108,7 +164,7 @@ const getUserInput = () => {
     if (!isWritingChallengeActive) {
       generateRandomNumbers();
     }
-    goUp();
+    showEarnings();
     start();
     keyboards += storeProducts[0].quantity;
     showKeyboards.innerText = doIt(keyboards);
@@ -119,7 +175,7 @@ const getUserInput = () => {
 
 input.addEventListener("keyup", getUserInput);
 
-// products =========================================================
+// ================ PRODUCTS ================
 let keyboardPerSecond = false;
 let showMoneyPerSecond = false;
 let kUp = false;
@@ -127,7 +183,7 @@ let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-export let keyboards = 10000000000;
+export let keyboards = 0;
 
 document.querySelectorAll(".product").forEach((product, index) => {
   product.addEventListener("click", () =>
@@ -135,7 +191,7 @@ document.querySelectorAll(".product").forEach((product, index) => {
   );
 });
 
-const xxt = () => {
+const enableProduction = () => {
   flag = true;
   showMoneyPerSecond = true;
   keyboardPerSecond = true;
@@ -159,11 +215,11 @@ const productClickerHandlerFirst = (index) => {
     getTax(this, index);
     updateProductPrice();
     productTooltip(index);
-    boost(this, index);
+    verifyToSetUpgrade(this, index);
 
     console.log("first");
     if (!flag) {
-      xxt();
+      enableProduction();
     }
   } else {
     alert("You don't have keyboards enough.");
@@ -186,20 +242,20 @@ const productClickerHandlerAll = (index) => {
     getTax(this, index);
     updateProductPrice();
     productTooltip(index);
-    boost(this, index);
+    verifyToSetUpgrade(this, index);
 
     console.log("all");
     if (!flag) {
-      xxt();
+      enableProduction();
     }
   } else {
     alert("You don't have keyboards enough.");
   }
 };
 
-// upgrades ===========================================================
+// ================ VERIFYING AND SETTING UPGRADES ================
 
-function boost(_, index) {
+function verifyToSetUpgrade(_, index) {
   let productIndex = +index;
   let productLevel = storeProducts[productIndex].level;
   let productName = storeProducts[productIndex].name;
@@ -393,73 +449,6 @@ const checkAcc = (productName, productIndex) => {
   }
 };
 
-let acc = [
-  {
-    id: 0,
-    dataid: 0,
-  },
-  {
-    id: 0,
-    dataid: 16,
-  },
-  {
-    id: 0,
-    dataid: 22,
-  },
-  {
-    id: 0,
-    dataid: 28,
-  },
-  {
-    id: 0,
-    dataid: 34,
-  },
-  {
-    id: 0,
-    dataid: 40,
-  },
-];
-
-let upgradesList = [
-  {
-    name: "keyboard",
-    chorume: [2, 2, 2],
-    currentMultiplier: 0.1,
-    multiplier: [5, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20],
-    upgradeCost: [80, 400, 8000, 80000, 8000000, 800000000], // million
-  },
-  {
-    name: "assistant",
-    chorume: [2, 2, 2, 2, 2],
-    upgradeCost: [800, 4000, 40000, 4000000, 400000000],
-  },
-  {
-    name: "coffeeMachines",
-    chorume: [2, 2, 2, 2],
-    upgradeCost: [8800, 44000, 444000, 44000000],
-  },
-  {
-    name: "ergonomicChairs",
-    chorume: [2, 2, 2, 2],
-    upgradeCost: [120000, 600000, 6000000, 600000000],
-  },
-  {
-    name: "textEditor",
-    chorume: [2, 2, 2],
-    upgradeCost: [1040000, 5200000, 52000000],
-  },
-  {
-    name: "speechToText",
-    chorume: [2, 2, 2],
-    upgradeCost: [11200000, 56000000, 560000000],
-  },
-  {
-    name: "writing",
-    chorume: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    upgradeCost: [40000, 4000000, 400000000, 40000000000, 4000000000000],
-  },
-];
-
 const priceTooltip = (_, productIndex, exclusiveIndex, dataid) => {
   let upgradeCost = upgradesList[productIndex].upgradeCost[exclusiveIndex];
   document.querySelector(`[data-id="${+dataid}"] > .tooltip-upgrade`).innerText = doIt(upgradeCost);
@@ -573,29 +562,33 @@ function tempMultipler() {
   tempMultiplier += totalOwn * upgradesList[0].currentMultiplier;
 }
 
-// autokeyboard =============================================
-const isAutoOn = () => {
-  start();
-
-  message.textContent = `+ ${storeProducts[0].quantity * 0.2}`;
+// ================ AUTOKEYBOARD ================
+const showReducedEarnings = () => {
+  message.innerText = `+ ${storeProducts[0].quantity * 0.1}`;
   message.classList.add("show");
   message.style.animation = "none";
   void message.offsetWidth;
   message.style.animation = "moveUp 0.2s forwards";
 
-  keyboards += storeProducts[0].quantity * 0.2;
+  keyboards += storeProducts[0].quantity * 0.1;
   showKeyboards.innerText = doIt(keyboards);
 
   setTimeout(() => {
     message.classList.remove("show");
-  }, 200);
+  }, 300);
+};
+
+const isAutoOn = () => {
+  start();
+  showReducedEarnings();
 };
 
 let autoKeyboard = document.querySelector(".auto-keyboard");
 let isRunning = false;
 let active = false;
-let delay = 10;
+let delay = 100; // AUTOKEYBOARD DELAY
 
+// debounce handles call stack
 const debounce = (func, delay) => {
   let timeoutId;
   return () => {
@@ -647,7 +640,7 @@ const autoK = async () => {
 
 autoKeyboard.addEventListener("click", debouncedToggleAutoKeyboard);
 
-// typing bonus events =============================================
+// ================ TYPING BONUS ================
 
 let isWritingChallengeActive = false;
 const writingChallenge = () => {
@@ -696,9 +689,9 @@ const generateRandomNumbers = () => {
   }
 };
 
-// localStorage =============================================
+// ================ LOCALSTORAGE ================
 
-const setEvents = () => {
+const rebuildUpgrades = () => {
   const upgrades = document.querySelector(".upgrades").childNodes;
   findProduct();
 
@@ -745,6 +738,28 @@ const setEvents = () => {
   });
 };
 
+const setData = (x) => {
+  x.forEach((variable, index) => {
+    switch (index) {
+      case 0:
+        storeProducts = variable;
+        break;
+      case 1:
+        upgradesList = variable;
+        break;
+      case 2:
+        acc = variable;
+        break;
+      case 3:
+        document.querySelector(".upgrades").outerHTML = variable;
+        break;
+      case 4:
+        keyboards = variable;
+        break;
+    }
+  });
+};
+
 const saveDataToLocalStorage = (data) => {
   localStorage.setItem("my", JSON.stringify(data));
 };
@@ -753,22 +768,16 @@ const loadDataFromLocalStorage = () => {
   const data = JSON.parse(localStorage.getItem("my"));
 
   if (data) {
-    // console.log("load: ", data);
-    storeProducts = data[0];
-    upgradesList = data[1];
-    acc = data[2];
-    document.querySelector(".upgrades").outerHTML = data[3];
-    keyboards = data[4];
+    setData(data);
     showKeyboards.innerText = doIt(keyboards);
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
     updateProductPrice();
-    xxt();
-
-    setEvents();
+    enableProduction();
+    rebuildUpgrades();
   }
 };
 
-setTimeout(loadDataFromLocalStorage(), 0);
+window.onload = loadDataFromLocalStorage();
 
 let upgrades = document.querySelector(".upgrades");
 
@@ -776,7 +785,7 @@ setInterval(() => {
   saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
 }, 45000);
 
-// localStorage upgrades handlers
+// ================ LOCALSTORAGE UPGRADES HANDLERS ================
 function findProduct() {
   document.querySelectorAll(".product").forEach((_, index) => {
     productTooltip(index);
@@ -870,3 +879,20 @@ function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
 
   document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
 }
+
+// ================ WINDOW SAVE ================
+
+options();
+document.querySelector("#exit").addEventListener("click", exit);
+
+document.querySelectorAll("#fodase").forEach((button, index) => {
+  button.addEventListener("click", () => {
+    if (index == 0) {
+      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
+      console.log("saved");
+    } else {
+      saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
+      prompt(index);
+    }
+  });
+});
