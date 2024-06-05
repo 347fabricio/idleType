@@ -645,27 +645,28 @@ autoKeyboard.addEventListener("click", debouncedToggleAutoKeyboard);
 let isWritingChallengeActive = false;
 const writingChallenge = () => {
   isWritingChallengeActive = true;
-  document.querySelector(".bonusTooltip").innerText = "2x typing";
   document.querySelector(".bonusTooltip").classList.add("show");
+  document.querySelector(".bonusTooltip").innerText = "2x typing";
 
   setTimeout(() => {
     document.querySelector(".bonusTooltip").classList.remove("show");
   }, 3000);
 
   const duration = Math.floor(Math.random() * (15 - 5)) + 5;
-  const progressBar = document.getElementById("progress");
+  const progressBar = document.getElementById("progress-bar");
+  const progress = document.getElementById("progress");
   const step = (duration * 1000) / 100;
-  let progress = 0;
+  let count = 0;
   let temp = storeProducts[0].quantity;
   storeProducts[0].quantity *= 2;
 
   progressBar.style.visibility = "visible";
 
   (function updateProgressBar() {
-    progress++;
-    progressBar.style.width = progress + "%";
+    count++;
+    progress.style.width = count + "%";
 
-    if (progress < 100) {
+    if (count < 100) {
       setTimeout(updateProgressBar, step);
     } else {
       storeProducts[0].quantity = temp;
@@ -675,7 +676,7 @@ const writingChallenge = () => {
         document.querySelector(".bonusTooltip").innerText = "";
         progressBar.style.visibility = "hidden";
 
-        progress = 0;
+        count = 0;
       }, 500);
     }
   })();
@@ -888,6 +889,15 @@ document.querySelector("#exit").addEventListener("click", exit);
 document.querySelectorAll("#fodase").forEach((button, index) => {
   button.addEventListener("click", () => {
     if (index == 0) {
+      const notes = document.querySelector(".notes");
+      notes.textContent = "Saved";
+      notes.classList.add("saved");
+
+      setTimeout(() => {
+        notes.classList.remove("saved");
+        notes.innerText = "";
+      }, 2000);
+
       saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
       console.log("saved");
     } else {
@@ -895,4 +905,36 @@ document.querySelectorAll("#fodase").forEach((button, index) => {
       prompt(index);
     }
   });
+});
+
+let windows = document.querySelectorAll(".window");
+let titleBars = document.querySelectorAll(".title-bar");
+let isDown = false;
+let offset = { x: 0, y: 0 };
+let activeWindow = null;
+
+titleBars.forEach((titleBar, index) => {
+  titleBar.addEventListener("mousedown", (e) => {
+    isDown = true;
+    activeWindow = windows[index];
+    offset.x = activeWindow.offsetLeft - e.clientX;
+    offset.y = activeWindow.offsetTop - e.clientY;
+  });
+
+  titleBar.addEventListener("mouseup", () => {
+    isDown = false;
+    activeWindow = null;
+  });
+});
+
+document.addEventListener("mousemove", (event) => {
+  event.preventDefault();
+  if (isDown && activeWindow) {
+    let mousePosition = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+    activeWindow.style.left = mousePosition.x + offset.x + "px";
+    activeWindow.style.top = mousePosition.y + offset.y + "px";
+  }
 });
