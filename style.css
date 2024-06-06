@@ -42,8 +42,8 @@ body {
 }
 
 .window:nth-child(4) {
-  top: 26%;
-  left: calc(90% - 20px);
+  top: 65%;
+  left: calc(50% - 300px);
   /* transform: translate(-50%, -50%); */
 }
 
@@ -52,7 +52,6 @@ body {
 .storeWindow,
 .upgradesWindow {
   position: absolute;
-  width: 260px;
   background-color: #bdbebd;
   padding: 2px;
   border-radius: 2px;
@@ -60,8 +59,12 @@ body {
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
 }
 
+.moneyWindow {
+  width: 260px;
+}
+
 .upgradesWindow {
-  width: fit-content;
+  width: 600px;
 }
 
 .storeWindow {
@@ -175,7 +178,7 @@ body {
   position: absolute;
   content: "";
   top: 100%;
-  left: 10%;
+  left: 5%;
   border-width: 5px;
   border-style: solid;
   border-color: #222222 transparent transparent transparent;
@@ -261,8 +264,11 @@ body {
 }
 
 .upgrades {
-  display: grid;
-  grid-template-columns: 50% 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 2px;
 }
 
@@ -273,13 +279,10 @@ body {
   cursor: pointer;
   width: 56px;
   height: 56px;
-  border: 2px solid #333333;
   border-radius: 2px;
   border: 1px solid #313131;
   background: silver;
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
-
-  transition: box-shadow 0.3s;
 }
 
 .store {
@@ -311,8 +314,6 @@ body {
   border: 1px solid #313131;
   background: silver;
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
-
-  transition: box-shadow 0.3s;
 }
 
 .upgrade {
@@ -327,6 +328,36 @@ body {
 .upgrade > img {
   content: url(assets/sKeyboard.svg);
   height: 20px;
+}
+
+.keyboard > img {
+  content: url(assets/sKeyboard.svg);
+  height: 20px;
+}
+
+.assistant > img {
+  content: url(assets/assistant.svg);
+  width: 42px;
+}
+
+.coffeeMachines > img {
+  content: url(assets/coffeeMachines.svg);
+  width: 42px;
+}
+
+.ergonomicChairs > img {
+  content: url(assets/ergonomicChairs.svg);
+  width: 42px;
+}
+
+.textEditor > img {
+  content: url(assets/textEditor.svg);
+  width: 42px;
+}
+
+.speechToText > img {
+  content: url(assets/speechToText.svg);
+  width: 42px;
 }
 
 .options button:hover,
@@ -348,7 +379,7 @@ body {
   letter-spacing: 0.1em;
   padding: 6px 8px;
   margin-left: -5px;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   background-color: silver;
   border: 1px solid #313131;
   border-radius: 2px;
@@ -362,7 +393,7 @@ body {
   content: "";
   position: absolute;
   top: 100%;
-  left: 10%;
+  left: 5%;
   border-width: 5px;
   border-style: solid;
   border-color: #0a0a0a transparent transparent transparent;
@@ -379,7 +410,7 @@ body {
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
   border-radius: 2px;
   padding: 10px 8px 10px 38px;
-  margin-bottom: 100px;
+  margin-bottom: 102px;
   background-image: url(./assets/keyboard.png);
   background-repeat: no-repeat;
   background-position: 8px 2px;
@@ -392,7 +423,7 @@ body {
   content: "";
   position: absolute;
   top: 100%;
-  left: 10%;
+  left: 40%;
   border-width: 5px;
   border-style: solid;
   border-color: #0a0a0a transparent transparent transparent;
@@ -638,6 +669,10 @@ li.item {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .product {
+    width: 116px;
   }
 
   .upgrades {

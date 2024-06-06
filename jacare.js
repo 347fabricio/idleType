@@ -7,7 +7,7 @@ export const updateProductPrice = () => {
     if (productPrice[i].innerText != storeProducts[i].cost) {
       productPrice[i].innerText = storeProducts[i].cost.toLocaleString("en-US", {
         notation: "compact",
-        compactDisplay: "long",
+        compactDisplay: "short",
       });
     }
   }

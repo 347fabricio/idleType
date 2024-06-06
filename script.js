@@ -183,7 +183,7 @@ let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-export let keyboards = 0;
+let keyboards = 1000000000;
 
 document.querySelectorAll(".product").forEach((product, index) => {
   product.addEventListener("click", () =>
