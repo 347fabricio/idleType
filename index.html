@@ -7,233 +7,237 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="window">
-      <div class="moneyWindow">
-        <div class="title-bar">
-          <div class="title-bar-text">Money $</div>
+    <main class="container">
+      <div class="window">
+        <div class="moneyWindow">
+          <div class="title-bar">
+            <div class="title-bar-text">Money $</div>
 
-          <!-- <div class="title-bar-controls">
+            <!-- <div class="title-bar-controls">
           <button></button>
           <button></button>
           <button></button>
         </div> -->
-        </div>
-        <div class="window-body">
-          <div class="total-money">
-            <div class="wallet">
-              <img src="assets/sKeyboard.svg" alt="Keyboard" class="keyboard" />
-              <span id="money-quantity" class="money-quantity">0</span>
-              <div class="keyboardEarned"></div>
+          </div>
+          <div class="window-body">
+            <div class="total-money">
+              <div class="wallet">
+                <img src="assets/sKeyboard.svg" alt="Keyboard" class="keyboard" />
+                <span id="money-quantity" class="money-quantity">0</span>
+                <div class="keyboardEarned"></div>
+              </div>
+
+              <div class="config">
+                <div class="auto-keyboard">
+                  <img src="assets/autoKeyboardOff.svg" alt="Auto Keyboard" />
+                  <div class="tooltiptext">
+                    <span>typing is reduced by 90%</span>
+                  </div>
+                </div>
+                <div class="save">
+                  <img src="assets/save.svg" alt="Save" />
+                </div>
+              </div>
             </div>
 
-            <div class="config">
-              <div class="auto-keyboard">
-                <img src="assets/auto-keyboard.svg" alt="Auto Keyboard" />
-                <span class="tooltiptext">typing is reduced by 80%</span>
-              </div>
-              <div class="save">
-                <img src="assets/save.svg" alt="Save" />
-              </div>
-            </div>
-          </div>
-
-          <div id="money-per-second" class="money-per-second disabled">
-            <span>money/second: 0</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="window">
-      <div class="typingWindow">
-        <div class="title-bar">
-          <div class="title-bar-text">Typing</div>
-        </div>
-
-        <div class="window-body">
-          <div class="type">
-            <div class="bonusTooltip"></div>
-
-            <p id="word-here"></p>
-
-            <div id="typeSection">
-              <input type="text" id="type-here" spellcheck="false" autofocus />
-              <div id="progress-bar">
-                <div id="progress"></div>
-              </div>
+            <div id="money-per-second" class="money-per-second disabled">
+              <span>money/second: 0</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="window">
-      <div class="storeWindow">
-        <div class="title-bar">
-          <div class="title-bar-text">Store</div>
-        </div>
+      <div class="window">
+        <div class="typingWindow">
+          <div class="title-bar">
+            <div class="title-bar-text">Typing</div>
+          </div>
 
-        <div class="window-body">
-          <div class="products">
-            <div id="0" class="product">
-              <div>Keyboard</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="0" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <div class="window-body">
+            <div class="type">
+              <div class="bonusTooltip"></div>
 
-            <div id="1" class="product">
-              <div>Assistant</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="1" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+              <p id="word-here"></p>
 
-            <div id="2" class="product">
-              <div>Coffee Machines</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="2" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div id="3" class="product">
-              <div>Ergonomic Chairs</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="3" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div id="4" class="product">
-              <div>Text Editor</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="4" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div id="5" class="product">
-              <div>Speech to Text</div>
-              <div class="upgrade">
-                <img src="assets/keyboard.png" alt="Keyboard" />
-                <span id="5" class="product-price"></span>
-                <div>
-                  <ul id="prolist">
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                    <li class="item">
-                      <span></span>
-                    </li>
-                  </ul>
+              <div id="typeSection">
+                <input type="text" id="type-here" spellcheck="false" autofocus />
+                <div id="progress-bar">
+                  <div id="progress"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="window">
-      <div class="upgradesWindow">
-        <div class="title-bar">
-          <div class="title-bar-text">Upgrades</div>
+      <div class="window">
+        <div class="storeWindow">
+          <div class="title-bar">
+            <div class="title-bar-text">Store</div>
+          </div>
+
+          <div class="window-body">
+            <div class="products">
+              <div id="0" class="product">
+                <div>Keyboard</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="0" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="1" class="product">
+                <div>Assistant</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="1" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="2" class="product">
+                <div>Coffee Machines</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="2" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="3" class="product">
+                <div>Ergonomic Chairs</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="3" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="4" class="product">
+                <div>Text Editor</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="4" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="5" class="product">
+                <div>Speech to Text</div>
+                <div class="upgrade">
+                  <img alt="Keyboard" />
+                  <span id="5" class="product-price"></span>
+                  <div>
+                    <ul id="prolist">
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                      <li class="item">
+                        <span></span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="window">
+        <div class="upgradesWindow">
+          <div class="title-bar">
+            <div class="title-bar-text">Upgrades</div>
+          </div>
+
+          <div class="window-body">
+            <div id="up" class="upgrades"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="options" id="options">
+        <div class="saveBtn">
+          <button id="fodase" title="It will save your game.">Save</button>
+        </div>
+        <div class="expImp">
+          <button id="fodase" title="It will export your game data.">Export save</button>
+          <button id="fodase" title="It will import your game data.">Import save</button>
+        </div>
+        <div class="download">
+          <button id="fodase" title="It will download your game data.">Save to file</button>
+          <button id="fodase" title="It will upload your game data.">Import from file</button>
         </div>
 
-        <div class="window-body">
-          <div id="up" class="upgrades"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="options" id="options">
-      <div class="saveBtn">
-        <button id="fodase" title="It will save your game.">Save</button>
-      </div>
-      <div class="expImp">
-        <button id="fodase" title="It will export your game data.">Export save</button>
-        <button id="fodase" title="It will import your game data.">Import save</button>
-      </div>
-      <div class="download">
-        <button id="fodase" title="It will download your game data.">Save to file</button>
-        <button id="fodase" title="It will upload your game data.">Import from file</button>
+        <span id="exit">+</span>
       </div>
 
-      <span id="exit">+</span>
-    </div>
-
-    <div class="notes"></div>
+      <div class="notes"></div>
+    </main>
   </body>
 
   <script src="script.js" type="module"></script>

@@ -11,41 +11,40 @@
 }
 
 body {
-  background: #c0c0c0;
+  background: #3a6ea5;
   user-select: none;
-  overflow: hidden;
 }
 
 .window {
   position: absolute;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .window:nth-child(1) {
   top: 15%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 260px;
+  left: calc(50% - 130px);
+  /* transform: translate(-50%, -50%); */
+  /* width: 260px; */
 }
 
 .window:nth-child(2) {
   top: 26%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
+  left: calc(50% - 300px);
+  /* transform: translate(-50%, -50%); */
+  /* width: 600px; */
 }
 
 .window:nth-child(3) {
   top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
+  left: calc(50% - 300px);
+  /* transform: translate(-50%, -50%); */
+  /* width: 600px; */
 }
 
 .window:nth-child(4) {
   top: 26%;
-  left: 82%;
-  transform: translate(-50%, -50%);
+  left: calc(90% - 20px);
+  /* transform: translate(-50%, -50%); */
 }
 
 .moneyWindow,
@@ -53,14 +52,12 @@ body {
 .storeWindow,
 .upgradesWindow {
   position: absolute;
-  margin: 10px auto;
   width: 260px;
-  background-color: #cccccc;
-  padding: 1px;
+  background-color: #bdbebd;
+  padding: 2px;
+  border-radius: 2px;
   border: 1px solid #313131;
-  box-shadow: 1px 1px 2px 0px #0a0a0a;
-  -webkit-box-shadow: 1px 1px 2px 0px #0a0a0a;
-  -moz-box-shadow: 1px 1px 2px 0px #0a0a0a;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
 }
 
 .upgradesWindow {
@@ -77,6 +74,7 @@ body {
 
 .title-bar {
   display: flex;
+  margin: 1px;
   justify-content: space-between;
   align-items: center;
   letter-spacing: 0.1rem;
@@ -84,44 +82,18 @@ body {
   font-weight: bold;
   color: #fff;
   padding: 2px;
-  background: linear-gradient(90deg, #000080, #1084d0);
+  background: linear-gradient(to right, rgb(130, 130, 130), rgb(130, 130, 130, 0));
 }
 
 .window-body {
   display: flex;
   flex-direction: column;
   margin: 4px;
-  gap: px;
   font-size: 12px;
 }
 
 .window-body > p {
   color: #000;
-}
-
-main {
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: column;
-  padding-bottom: 30px;
-  height: 100vh;
-  transition: filter 0.2s;
-}
-
-.tega {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 30px;
-  width: 60%;
-  height: 300px;
-  margin: 0 auto;
-  border-radius: 8px;
-  background: #0c0c0c;
-  -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.75);
 }
 
 .type {
@@ -135,7 +107,7 @@ main {
   display: flex;
   font-size: 24px;
   font-weight: bold;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.1em;
   justify-content: center;
   align-items: flex-end;
   height: 33%;
@@ -147,29 +119,6 @@ main {
   width: 50%;
   gap: 4px;
 }
-
-/* input {
-  display: flex;
-  background-color: #111111;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 16px;
-  padding: 4px;
-  height: 34px;
-  outline: none;
-  border: 1px solid #333333;
-  -webkit-box-shadow: 0px 0px 6px 0px rgba(40, 40, 40, 0.75);
-  -moz-box-shadow: 0px 0px 6px 0px rgba(40, 40, 40, 0.75);
-  box-shadow: 0px 0px 6px 0px rgba(40, 40, 40, 0.75);
-  transition: box-shadow 0.3s;
-} */
-
-/* input:focus {
-  border: 1px solid #383838;
-  -webkit-box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
-  -moz-box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
-  box-shadow: 0px 0px 16px 0px rgba(40, 40, 40, 0.75);
-} */
 
 #progress-bar {
   visibility: hidden;
@@ -183,12 +132,9 @@ main {
   background-color: #1a0094;
 }
 
-/* .auto-keyboard {
-  position: relative;
-} */
-
 .config {
   display: flex;
+  align-items: flex-start;
   height: 30px;
   gap: 4px;
 }
@@ -198,43 +144,46 @@ main {
   align-items: center;
   gap: 4px;
 }
+.auto-keyboard {
+  display: flex;
+  align-items: flex-end;
+}
 
 .auto-keyboard > img {
   height: 26px;
   cursor: pointer;
 }
 
-.auto-keyboard > .tooltiptext {
+.tooltiptext {
+  position: absolute;
   visibility: hidden;
   width: 120px;
-  background-color: #333333;
-  color: #fff;
   text-align: center;
   font-size: 12px;
-  border-radius: 6px;
-  padding: 4px;
-  position: absolute;
-  z-index: 1;
-  top: -5%;
-  left: 125%;
-  margin-left: -15px;
-  margin-top: 25px;
+  margin-bottom: 32px;
+  border-radius: 2px;
+  padding: 6px 8px;
+  background-color: silver;
+  border: 1px solid #313131;
+  border-radius: 2px;
+  background: silver;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
   opacity: 0;
 }
 
-.auto-keyboard > .tooltiptext::after {
-  content: "";
+.tooltiptext::after {
   position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -5px;
+  content: "";
+  top: 100%;
+  left: 10%;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent #222222 transparent transparent;
+  border-color: #222222 transparent transparent transparent;
 }
 
-.auto-keyboard > img:hover {
-  opacity: 0.4;
+.tooltiptext > span {
+  letter-spacing: 0.1em;
+  border-bottom: 1px dashed #000;
 }
 
 #type-here {
@@ -264,13 +213,6 @@ main {
 .options button:active,
 .promptBtnDiv > button:active {
   transform: translateY(2px);
-}
-
-.money {
-  display: flex;
-  flex-direction: column;
-  margin: 0px auto;
-  gap: 2px;
 }
 
 .keyboard {
@@ -309,7 +251,7 @@ main {
     transform: translate(0px, 0);
   }
   100% {
-    transform: translate(0px, -15px);
+    transform: translate(0px, -8px);
   }
 }
 
@@ -319,11 +261,8 @@ main {
 }
 
 .upgrades {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 50% 50%;
   gap: 2px;
 }
 
@@ -356,7 +295,6 @@ main {
   justify-content: center;
   flex-wrap: wrap;
   gap: 4px;
-  padding: 8px;
 }
 
 .product {
@@ -364,10 +302,12 @@ main {
   flex-direction: column;
   cursor: pointer;
   width: 160px;
+  gap: 4px;
   padding: 4px 6px;
   font-size: 14px;
+  letter-spacing: 0.03em;
+  font-weight: bold;
   border-radius: 2px;
-  background-color: silver;
   border: 1px solid #313131;
   background: silver;
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
@@ -381,6 +321,12 @@ main {
   align-items: flex-end;
   gap: 2px;
   font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.upgrade > img {
+  content: url(assets/sKeyboard.svg);
+  height: 20px;
 }
 
 .options button:hover,
@@ -399,6 +345,7 @@ main {
   visibility: hidden;
   position: absolute;
   width: max-content;
+  letter-spacing: 0.1em;
   padding: 6px 8px;
   margin-left: -5px;
   margin-bottom: 60px;
@@ -424,6 +371,7 @@ main {
 .tooltip-upgrade {
   visibility: hidden;
   position: absolute;
+  letter-spacing: 0.1em;
   width: max-content;
   border: 1px solid #313131;
   border-radius: 2px;
@@ -448,6 +396,10 @@ main {
   border-width: 5px;
   border-style: solid;
   border-color: #0a0a0a transparent transparent transparent;
+}
+
+.tooltip-upgrade > span {
+  border-bottom: 1px dashed #000;
 }
 
 .boxUpgrade:hover .tooltip-upgrade {
@@ -630,4 +582,73 @@ li.item {
   font-size: 12px;
   width: 60px;
   padding: 2px 12px;
+}
+
+@media screen and (max-width: 760px) {
+  .container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    column-gap: 20px;
+    height: 100vh;
+  }
+
+  .window {
+    position: unset;
+    width: unset;
+    align-content: center;
+  }
+
+  .window:nth-child(1) {
+    grid-column: 1/3;
+  }
+
+  .window:nth-child(2) {
+    grid-column: 1/3;
+  }
+
+  .window:nth-child(3) {
+    grid-column: 1/2;
+    justify-self: flex-end;
+    align-content: flex-start;
+    margin: 0;
+    width: fit-content;
+  }
+
+  .window:nth-child(4) {
+    grid-column: 2/3;
+    justify-self: flex-start;
+    align-content: flex-start;
+    margin: 0;
+    width: fit-content;
+  }
+
+  .typingWindow {
+    width: 75vw;
+  }
+
+  .storeWindow {
+    width: 100%;
+  }
+
+  .upgradesWindow {
+    width: 100%;
+  }
+
+  .products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .upgrades {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .moneyWindow,
+  .typingWindow,
+  .storeWindow,
+  .upgradesWindow {
+    position: unset;
+  }
 }

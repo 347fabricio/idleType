@@ -363,6 +363,7 @@ function verifyToSetUpgrade(_, index) {
 
 const createUpgrade = (productName, productIndex) => {
   const div = document.createElement("div");
+  const tooltipDiv = document.createElement("div");
   const img = document.createElement("img");
   const span = document.createElement("span");
 
@@ -399,9 +400,10 @@ const createUpgrade = (productName, productIndex) => {
       break;
   }
 
-  span.classList.add("tooltip-upgrade");
-  span.innerText = ``;
-  div.appendChild(span);
+  tooltipDiv.classList.add("tooltip-upgrade");
+  span.innerText = "";
+  tooltipDiv.appendChild(span);
+  div.appendChild(tooltipDiv);
 
   div.classList.add("boxUpgrade", productName);
   div.appendChild(img);
@@ -451,7 +453,7 @@ const checkAcc = (productName, productIndex) => {
 
 const priceTooltip = (_, productIndex, exclusiveIndex, dataid) => {
   let upgradeCost = upgradesList[productIndex].upgradeCost[exclusiveIndex];
-  document.querySelector(`[data-id="${+dataid}"] > .tooltip-upgrade`).innerText = doIt(upgradeCost);
+  document.querySelector(`[data-id="${+dataid}"] > .tooltip-upgrade > span`).innerText = doIt(upgradeCost);
 };
 
 const doubleXp = (_, productIndex, exclusiveIndex, dataid) => {
@@ -583,7 +585,7 @@ const isAutoOn = () => {
   showReducedEarnings();
 };
 
-let autoKeyboard = document.querySelector(".auto-keyboard");
+let autoKeyboard = document.querySelector(".auto-keyboard > img");
 let isRunning = false;
 let active = false;
 let delay = 100; // AUTOKEYBOARD DELAY
@@ -604,13 +606,13 @@ function toggleAutoKeyboard() {
     active = true;
     isRunning = true;
     autoK();
-    autoKeyboard.children[0].style.opacity = "1";
+    autoKeyboard.style.opacity = "1";
     autoKeyboard.classList.add("on");
-    autoKeyboard.children[0].src = "assets/auto-keyboardOn.png";
+    autoKeyboard.src = "assets/autoKeyboardOn.svg";
   } else {
     isRunning = false;
-    autoKeyboard.children[0].style.opacity = "";
-    autoKeyboard.children[0].src = "assets/auto-keyboard.png";
+    autoKeyboard.style.opacity = "";
+    autoKeyboard.src = "assets/autoKeyboardOff.svg";
     autoKeyboard.classList.remove("on");
     active = false;
   }
