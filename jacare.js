@@ -1,18 +1,5 @@
 import { storeProducts } from "./script.js";
 
-export let productPrice = document.querySelectorAll(".product-price");
-
-export const updateProductPrice = () => {
-  for (let i = 0; i < productPrice.length; i++) {
-    if (productPrice[i].innerText != storeProducts[i].cost) {
-      productPrice[i].innerText = storeProducts[i].cost.toLocaleString("en-US", {
-        notation: "compact",
-        compactDisplay: "short",
-      });
-    }
-  }
-};
-
 export const getTax = (_, y) => {
   storeProducts[y].cost = Math.ceil(storeProducts[y].baseCost * Math.pow(1.15, storeProducts[y].own));
 };
@@ -78,7 +65,7 @@ const isInTheMillions = (productIndex, what) => {
 };
 
 export const doIt = (_) => {
-  if (_ >= 1000000) {
+  if (_ >= 1000) {
     const formattedNumber = _.toLocaleString("en-US", {
       notation: "compact",
       compactDisplay: "long",

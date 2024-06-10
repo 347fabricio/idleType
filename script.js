@@ -1,5 +1,5 @@
 import { start, word, input } from "./wordsList.js";
-import { updateProductPrice, getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
+import { getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
 import { options, exit, prompt } from "./options.js";
 
 export let storeProducts = [
@@ -135,7 +135,7 @@ let acc = [
 
 // ================ START ================
 start();
-updateProductPrice();
+getScreenSize();
 
 // ================ KEYBOARDS EARNED BY TYPING ================
 const message = document.querySelector(".keyboardEarned");
@@ -183,7 +183,7 @@ let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-let keyboards = 1000000000;
+let keyboards = 0;
 
 document.querySelectorAll(".product").forEach((product, index) => {
   product.addEventListener("click", () =>
@@ -213,11 +213,10 @@ const productClickerHandlerFirst = (index) => {
 
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
     getTax(this, index);
-    updateProductPrice();
+    getScreenSize();
     productTooltip(index);
     verifyToSetUpgrade(this, index);
 
-    console.log("first");
     if (!flag) {
       enableProduction();
     }
@@ -240,11 +239,10 @@ const productClickerHandlerAll = (index) => {
 
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
     getTax(this, index);
-    updateProductPrice();
+    getScreenSize();
     productTooltip(index);
     verifyToSetUpgrade(this, index);
 
-    console.log("all");
     if (!flag) {
       enableProduction();
     }
@@ -369,32 +367,26 @@ const createUpgrade = (productName, productIndex) => {
 
   switch (productName) {
     case "keyboard":
-      img.src = "assets/keyboard.png";
       div.id = acc[0].id;
       div.dataset.id = acc[0].dataid;
       break;
     case "assistant":
-      img.src = "assets/assistant.png";
       div.id = acc[1].id;
       div.dataset.id = acc[1].dataid;
       break;
     case "coffeeMachines":
-      img.src = "";
       div.id = acc[2].id;
       div.dataset.id = acc[2].dataid;
       break;
     case "ergonomicChairs":
-      img.src = "";
       div.id = acc[3].id;
       div.dataset.id = acc[3].dataid;
       break;
     case "textEditor":
-      img.src = "";
       div.id = acc[4].id;
       div.dataset.id = acc[4].dataid;
       break;
     case "speechToText":
-      img.src = "";
       div.id = acc[5].id;
       div.dataset.id = acc[5].dataid;
       break;
@@ -774,7 +766,7 @@ const loadDataFromLocalStorage = () => {
     setData(data);
     showKeyboards.innerText = doIt(keyboards);
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
-    updateProductPrice();
+    getScreenSize();
     enableProduction();
     rebuildUpgrades();
   }
@@ -940,3 +932,34 @@ document.addEventListener("mousemove", (event) => {
     activeWindow.style.top = mousePosition.y + offset.y + "px";
   }
 });
+
+// ================ CHECK SCREEN SIZE ================
+
+function getScreenSize() {
+  let screen = document.body.clientWidth;
+  let productPrice = document.querySelectorAll(".product-price");
+
+  if (screen <= 760) {
+    for (let i = 0; i < productPrice.length; i++) {
+      if (productPrice[i].innerText != storeProducts[i].cost) {
+        productPrice[i].innerText = storeProducts[i].cost.toLocaleString("en-US", {
+          notation: "compact",
+          compactDisplay: "short",
+        });
+      }
+    }
+  } else {
+    for (let i = 0; i < productPrice.length; i++) {
+      if (productPrice[i].innerText != storeProducts[i].cost) {
+        productPrice[i].innerText = storeProducts[i].cost.toLocaleString("en-US", {
+          notation: "compact",
+          compactDisplay: "long",
+        });
+      }
+    }
+  }
+}
+
+const debouncedScreenSize = debounce(getScreenSize, 1000);
+
+window.addEventListener("resize", debouncedScreenSize);

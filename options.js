@@ -2,10 +2,10 @@ let mainToggle = true;
 
 const showHideMain = () => {
   const optionsElement = document.querySelector("#options");
-  const bgOpacity = document.querySelector("main");
+  const bgOpacity = document.querySelector(".windows");
 
   optionsElement.style.visibility = mainToggle ? "visible" : "hidden";
-  bgOpacity.style.filter = mainToggle ? "blur(3px)" : "";
+  bgOpacity.style.opacity = mainToggle ? "0.8" : "";
 
   mainToggle = !mainToggle;
 };
@@ -20,19 +20,7 @@ export function exit() {
   return false;
 }
 
-let optionsToggle = true;
-
-const showHideOptions = () => {
-  const optionsElement = document.querySelector("#options");
-
-  optionsElement.style.filter = optionsToggle ? "blur(2px)" : "";
-
-  optionsToggle = !optionsToggle;
-};
-
 export const prompt = (index) => {
-  showHideOptions();
-
   const div = document.createElement("div");
   const promptBtnDiv = document.createElement("div");
   const h3 = document.createElement("h3");
@@ -87,7 +75,6 @@ const copyButton = () => {
 
 const exitButton = () => {
   document.querySelector("#prompt").remove();
-  showHideOptions();
 };
 
 const exportSave = () => {
