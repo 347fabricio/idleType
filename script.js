@@ -600,11 +600,13 @@ function toggleAutoKeyboard() {
     autoK();
     autoKeyboard.style.opacity = "1";
     autoKeyboard.classList.add("on");
-    autoKeyboard.src = "assets/autoKeyboardOn.svg";
+    autoKeyboard.src =
+      "https://gist.githubusercontent.com/347fabricio/cb6a4b2bd7494cbd70e6d4cbf80d469e/raw/ea6136a920b81e54476fb3c44b10f7f3c486f7eb/autoKeyboardOn.svg";
   } else {
     isRunning = false;
     autoKeyboard.style.opacity = "";
-    autoKeyboard.src = "assets/autoKeyboardOff.svg";
+    autoKeyboard.src =
+      "https://gist.githubusercontent.com/347fabricio/bd96d031e0272bf10150bf6c0a934640/raw/031bbf36ee928127008dbe6cc35b312528bf055f/autoKeyboardOff.svg";
     autoKeyboard.classList.remove("on");
     active = false;
   }

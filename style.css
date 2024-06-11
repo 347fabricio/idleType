@@ -1,10 +1,10 @@
 @font-face {
-  font-family: Chicago;
-  src: url(assets/ChicagoFLF.otf);
+  font-family: "Chicago";
+  src: url("font/W95FARegular.woff2") format("woff2"), url("font/W95FARegular.woff") format("woff");
 }
 
 * {
-  font-family: Chicago;
+  font-family: "Chicago", serif;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -91,10 +91,6 @@ body {
   margin: 4px;
   font-size: 12px;
 }
-
-/* .window-body > p {
-  color: #000;
-} */
 
 .type {
   display: flex;
@@ -214,11 +210,26 @@ body {
 .promptBtnDiv > button:active {
   box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px grey;
   transform: translateY(2px);
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .auto-keyboard:active,
-.save:active {
+.save:active,
+#exit:active {
   transform: translateY(2px);
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .keyboard {
@@ -329,47 +340,38 @@ body {
 }
 
 .upgrade > img {
-  content: url(assets/sKeyboard.svg);
   height: 20px;
 }
 
 .keyboard > img {
-  content: url(assets/sKeyboard.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/79edf1cc4d84aab660a7c5cb3204abdd/raw/da4a77d49bd189be440c17455a15838045100530/sKeyboard.svg);
   height: 20px;
 }
 
 .assistant > img {
-  content: url(assets/assistant.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/5fe67a3ae3b1956d471ff1c6f0c28684/raw/1c9301df43cc43435ea3a7cb03c28189326efe41/assistant.svg);
   width: 42px;
 }
 
 .coffeeMachines > img {
-  content: url(assets/coffeeMachines.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/44d2122e54468aaa1c8c257ec773ccc2/raw/684997d3fb7f10b37d33e7a46eb93457a8263cef/coffeeMachines.svg);
   width: 42px;
 }
 
 .ergonomicChairs > img {
-  content: url(assets/ergonomicChairs.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/d5439287f8ef4e00154fbc3a31855fe9/raw/b82ddfff2fe78bc04df7c8e0da6cac82257e6b5b/ergonomicChairs.svg);
   width: 42px;
 }
 
 .textEditor > img {
-  content: url(assets/textEditor.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/2057675cfaf8f2a855d2d93c2f4e46fc/raw/635784f97c4475f41260e488636e158c0e29b5c0/textEditor.svg);
   width: 42px;
 }
 
 .speechToText > img {
-  content: url(assets/speechToText.svg);
+  content: url(https://gist.githubusercontent.com/347fabricio/8ef56585c84580e037a6899d2d5ee821/raw/2ee113307ef4db315768c09e4d29ca1887eac831/speechToText.svg);
   width: 42px;
 }
-
-/* .options button:hover,
-.promptBtnDiv > button:hover {
-  border: 2px solid #383838;
-  -webkit-box-shadow: 0px 0px 14px 0px rgba(40, 40, 40, 0.75);
-  -moz-box-shadow: 0px 0px 14px 0px rgba(40, 40, 40, 0.75);
-  box-shadow: 0px 0px 14px 0px rgba(40, 40, 40, 0.75);
-} */
 
 .disabled {
   opacity: 0;
@@ -433,6 +435,7 @@ body {
 }
 
 .tooltip-upgrade > span {
+  font-weight: bold;
   border-bottom: 1px dashed #000;
 }
 
@@ -508,6 +511,7 @@ li.item {
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
   width: 120px;
   font-size: 14px;
+  font-weight: bold;
   letter-spacing: 0.1em;
   padding: 2px 8px;
 }
@@ -546,15 +550,13 @@ li.item {
 #exit {
   position: absolute;
   right: 10px;
+  padding: 0 4px;
+  width: fit-content;
   cursor: pointer;
-  border: none;
-  content: url(assets/exit.svg);
-  height: 32px;
-  transition: transform 0.2s;
 }
 
-#exit:hover {
-  transform: scale(1.2);
+#exit > img {
+  height: 26px;
 }
 
 .prompt {
@@ -588,9 +590,11 @@ li.item {
 
 .prompt > textarea {
   padding: 4px;
+  border: 1px solid #000;
   border-radius: 2px;
   background-color: silver;
   font-size: 12px;
+  font-weight: bold;
   height: 160px;
   letter-spacing: 0.1em;
   resize: none;
@@ -611,6 +615,7 @@ li.item {
   background: silver;
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
   font-size: 14px;
+  font-weight: bold;
   letter-spacing: 0.1em;
   width: 60px;
   padding: 2px 12px;
@@ -686,5 +691,16 @@ li.item {
   .storeWindow,
   .upgradesWindow {
     position: unset;
+  }
+
+  .tooltiptext {
+    margin-left: 30px;
+    margin-bottom: 0px;
+  }
+
+  .tooltiptext::after {
+    top: 50%;
+    left: -10px;
+    border-color: transparent #222222 transparent transparent;
   }
 }

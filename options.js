@@ -88,13 +88,13 @@ const importSave = () => {
   document.querySelector(".prompt > h3").innerText = "IMPORT SAVE";
   document.querySelector(".doBtn").addEventListener("click", () => {
     const b64 = document.querySelector(".promptTextArea").value;
-    const b64Decoded = JSON.parse(atob(b64));
 
     try {
+      const b64Decoded = JSON.parse(atob(b64));
       localStorage.setItem("my", JSON.stringify(b64Decoded));
       location.reload();
     } catch {
-      document.querySelector(".promptTextArea").innerText = "paste something...";
+      document.querySelector(".promptTextArea").innerText = "Error: close and open";
     }
   });
 };
