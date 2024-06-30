@@ -1,10 +1,21 @@
-export let word = document.querySelector("#word-here");
+export let words = document.querySelectorAll("#word-here > span");
 export let input = document.querySelector("#type-here");
 
-export const start = () => {
-  input.value = "";
-  word.innerHTML = wordList[Math.floor(Math.random() * wordList.length)];
-};
+function setWord() {
+  words.forEach((x) => {
+    x.innerHTML = wordList[Math.floor(Math.random() * wordList.length)];
+  });
+}
+
+// document.querySelectorAll(".product").forEach((product, index) => {
+//   product.addEventListener("click", () =>
+//     index > 0 ? productClickerHandlerAll(index) : productClickerHandlerFirst(index)
+//   );
+// });
+
+export function start(len) {
+  setWord();
+}
 
 export const wordList = [
   "ability",

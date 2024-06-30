@@ -1,6 +1,7 @@
-import { start, word, input } from "./wordsList.js";
+import { start, words, input } from "./wordsList.js";
 import { getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
 import { options, exit, prompt } from "./options.js";
+import { showColorPicker } from "./colorPicker.js";
 
 export let storeProducts = [
   {
@@ -155,21 +156,21 @@ const showEarnings = (x) => {
 };
 
 // ================ USER TYPING ================
-let answer = "";
+export let answer = "";
 
 const getUserInput = () => {
+  start(len);
   answer = input.value.trim();
-
-  if (answer == word.innerText) {
+  if (answer == words.innerText) {
     if (!isWritingChallengeActive) {
       generateRandomNumbers();
     }
     showEarnings();
-    start();
+    input.value = "";
     keyboards += storeProducts[0].quantity;
     showKeyboards.innerText = doIt(keyboards);
-  } else if (answer.length > word.innerText.length) {
-    start();
+  } else if (answer.length > words.innerText.length) {
+    input.value = "";
   }
 };
 
@@ -601,12 +602,12 @@ function toggleAutoKeyboard() {
     autoKeyboard.style.opacity = "1";
     autoKeyboard.classList.add("on");
     autoKeyboard.src =
-      "https://gist.githubusercontent.com/347fabricio/cb6a4b2bd7494cbd70e6d4cbf80d469e/raw/ea6136a920b81e54476fb3c44b10f7f3c486f7eb/autoKeyboardOn.svg";
+      "https://gist.githubusercontent.com/347fabricio/e534c79d2a515779b6c654176d9d061e/raw/8c34362e16135b68a1f4bf4ed9fb76e059baaf0b/autoKeyboardOff.svg";
   } else {
     isRunning = false;
     autoKeyboard.style.opacity = "";
     autoKeyboard.src =
-      "https://gist.githubusercontent.com/347fabricio/bd96d031e0272bf10150bf6c0a934640/raw/031bbf36ee928127008dbe6cc35b312528bf055f/autoKeyboardOff.svg";
+      "https://gist.githubusercontent.com/347fabricio/15ac2927effbde6e263c68b5857c1027/raw/f6fabc50bde42eaa0a667370672a8d89cad319b0/autoKeyboard.svg";
     autoKeyboard.classList.remove("on");
     active = false;
   }
@@ -877,7 +878,19 @@ function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
   document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
 }
 
-// ================ WINDOW SAVE ================
+// ================ notes ================
+export const createNote = (message) => {
+  const notes = document.querySelector(".notes");
+  notes.textContent = message;
+  notes.classList.add("saved");
+
+  setTimeout(() => {
+    notes.classList.remove("saved");
+    notes.innerText = "";
+  }, 2000);
+};
+
+// ================ SAVE WINDOW ================
 
 options();
 document.querySelector("#exit").addEventListener("click", exit);
@@ -885,17 +898,8 @@ document.querySelector("#exit").addEventListener("click", exit);
 document.querySelectorAll("#fodase").forEach((button, index) => {
   button.addEventListener("click", () => {
     if (index == 0) {
-      const notes = document.querySelector(".notes");
-      notes.textContent = "Saved";
-      notes.classList.add("saved");
-
-      setTimeout(() => {
-        notes.classList.remove("saved");
-        notes.innerText = "";
-      }, 2000);
-
+      createNote("Saved");
       saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
-      console.log("saved");
     } else {
       saveDataToLocalStorage([storeProducts, upgradesList, acc, upgrades.outerHTML, keyboards]);
       prompt(index);
@@ -903,6 +907,7 @@ document.querySelectorAll("#fodase").forEach((button, index) => {
   });
 });
 
+// ================ CHECK SCREEN SIZE ================
 let windows = document.querySelectorAll(".window");
 let titleBars = document.querySelectorAll(".title-bar");
 let isDown = false;
@@ -935,8 +940,6 @@ document.addEventListener("mousemove", (event) => {
   }
 });
 
-// ================ CHECK SCREEN SIZE ================
-
 function getScreenSize() {
   let screen = document.body.clientWidth;
   let productPrice = document.querySelectorAll(".product-price");
@@ -965,3 +968,6 @@ function getScreenSize() {
 const debouncedScreenSize = debounce(getScreenSize, 1000);
 
 window.addEventListener("resize", debouncedScreenSize);
+
+// ================ CHANGE ELEMENT COLORS ================
+showColorPicker();

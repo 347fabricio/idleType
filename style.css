@@ -3,6 +3,38 @@
   src: url("font/W95FARegular.woff2") format("woff2"), url("font/W95FARegular.woff") format("woff");
 }
 
+:root {
+  --light-color: #000000;
+  --light-title-color: #ffffff;
+  --light-bg-color: #bdbebd;
+  --light-body-bg-color: #c0c0c0;
+  --light-border-color: #313131;
+  --light-box-shadow1: #0a0a0a;
+  --light-box-shadow2: #ffffff;
+  --light-box-shadow3: #72777e;
+  --light-box-shadow4: #dfdfdf;
+  --light-product-color: #bdbebd;
+  --light-input-color: #ffffff;
+  --light-input-border-color: #d5d5d5;
+  --light-input-box-color: #828282;
+}
+
+.dark-theme {
+  --light-color: #e8e6e3;
+  --light-title-color: #e8e6e3;
+  --light-bg-color: #3d4245;
+  --light-body-bg-color: #181a1b;
+  --light-border-color: #7c7366;
+  --light-box-shadow1: #080808;
+  --light-box-shadow2: #181a1b;
+  --light-box-sadow3: #60686c;
+  --light-box-shadow4: #2a2e2f;
+  --light-product-color: #3c4143;
+  --light-input-color: #181a1b;
+  --light-input-border-color: #3c4143;
+  --light-input-box-color: #5f666a;
+}
+
 * {
   font-family: "Chicago", serif;
   padding: 0;
@@ -11,8 +43,75 @@
 }
 
 body {
-  background: #3a6ea5;
+  color: var(--light-color);
+  background: var(--light-body-bg-color);
   user-select: none;
+}
+
+.controlPanel {
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  margin: 6px;
+}
+
+.tips,
+.colorPicker > img {
+  cursor: pointer;
+}
+
+.colorPickerWindow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 26px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 25%;
+  margin: auto;
+  width: 320px;
+  height: 200px;
+  padding: 10px 8px;
+  border-radius: 2px;
+  border: 1px solid #313131;
+  background: silver;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+}
+
+.colorPickerWindow > h3 {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  border-bottom: 1px dashed #000;
+  font-size: 16px;
+  letter-spacing: 0.2rem;
+}
+
+.colorPickerWindow > input {
+  text-decoration: none;
+  width: 200px;
+  height: 80px;
+  margin: auto;
+}
+
+.colorPickerBtn {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.colorPickerBtn > button {
+  cursor: pointer;
+  border-radius: 2px;
+  border: 1px solid #313131;
+  background: silver;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  width: 60px;
+  padding: 2px 12px;
 }
 
 .windows {
@@ -30,17 +129,17 @@ body {
 }
 
 .window:nth-child(2) {
-  top: 26%;
+  top: 28%;
   left: calc(50% - 300px);
 }
 
 .window:nth-child(3) {
-  top: 46%;
+  top: 50%;
   left: calc(50% - 300px);
 }
 
 .window:nth-child(4) {
-  top: 65%;
+  top: 72%;
   left: calc(50% - 300px);
 }
 
@@ -49,11 +148,12 @@ body {
 .storeWindow,
 .upgradesWindow {
   position: absolute;
-  background-color: #bdbebd;
+  background-color: var(--light-bg-color);
   padding: 2px;
   border-radius: 2px;
-  border: 1px solid #313131;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
 }
 
 .moneyWindow {
@@ -80,7 +180,7 @@ body {
   letter-spacing: 0.1rem;
   font-size: 12px;
   font-weight: bold;
-  color: #fff;
+  color: var(--light-title-color);
   padding: 2px;
   background: linear-gradient(to right, rgb(130, 130, 130), rgb(130, 130, 130, 0));
 }
@@ -109,6 +209,14 @@ body {
   height: 33%;
 }
 
+#word-here > span {
+  margin-right: 8px;
+}
+
+#word-here > span:last-child {
+  margin-right: 0;
+}
+
 #typeSection {
   display: flex;
   flex-direction: column;
@@ -119,8 +227,8 @@ body {
 #progress-bar {
   visibility: hidden;
   width: 100%;
-  background-color: silver;
-  border: 1px inset #d5d5d5;
+  background-color: var(--light-bg-color);
+  border: 1px inset var(--light-border-color);
 }
 
 #progress {
@@ -157,14 +265,15 @@ body {
   width: 120px;
   text-align: center;
   font-size: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 30px;
   border-radius: 2px;
+  line-height: 16px;
   padding: 6px 8px;
-  background-color: silver;
-  border: 1px solid #313131;
+  border: 1px solid var(--light-border-color);
   border-radius: 2px;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   opacity: 0;
 }
 
@@ -180,21 +289,23 @@ body {
 
 .tooltiptext > span {
   letter-spacing: 0.1em;
-  border-bottom: 1px dashed #000;
+  border-bottom: 1px dashed var(--light-color);
 }
 
 #type-here {
   text-align: center;
   font-size: 16px;
+  font-weight: bold;
   letter-spacing: 0.1em;
   outline: none;
   width: 100%;
   padding: 3px 4px;
-  border: 2px inset #d5d5d5;
-  background-color: #fff;
-  -webkit-box-shadow: -1px -1px 0 0 #828282;
-  -moz-box-shadow: -1px -1px 0 0 #828282;
-  box-shadow: -1px -1px 0 0 #828282;
+  color: var(--light-color);
+  border: 2px inset var(--light-input-border-color);
+  background-color: var(--light-input-color);
+  -webkit-box-shadow: -1px -1px 0 0 var(--light-input-box-color);
+  -moz-box-shadow: -1px -1px 0 0 var(--light-input-box-color);
+  box-shadow: -1px -1px 0 0 var(--light-input-box-color);
 }
 
 .auto-keyboard:hover .tooltiptext {
@@ -207,8 +318,10 @@ body {
 .product:active,
 .boxUpgrade:active,
 .options button:active,
-.promptBtnDiv > button:active {
-  box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px grey;
+.promptBtnDiv > button:active,
+.colorPickerWindow > #exit:active {
+  box-shadow: inset -1px -1px var(--light-box-shadow2), inset 1px 1px var(--light-box-shadow1),
+    inset -2px -2px var(--light-box-shadow4), inset 2px 2px var(--light-box-shadow3);
   transform: translateY(2px);
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   -webkit-tap-highlight-color: transparent;
@@ -275,6 +388,7 @@ body {
 .money-per-second span {
   display: flex;
   font-size: 12px;
+  font-weight: bold;
 }
 
 .upgrades {
@@ -294,9 +408,10 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
 }
 
 .store {
@@ -325,9 +440,10 @@ body {
   letter-spacing: 0.03em;
   font-weight: bold;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  background: var(--light-product-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
 }
 
 .upgrade {
@@ -385,11 +501,11 @@ body {
   padding: 6px 8px;
   margin-left: -5px;
   margin-bottom: 50px;
-  background-color: silver;
-  border: 1px solid #313131;
+  border: 1px solid var(--light-border-color);
   border-radius: 2px;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -409,10 +525,11 @@ body {
   position: absolute;
   letter-spacing: 0.1em;
   width: max-content;
-  border: 1px solid #313131;
+  border: 1px solid var(--light-border-color);
   border-radius: 2px;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   border-radius: 2px;
   padding: 10px 8px 10px 38px;
   margin-bottom: 102px;
@@ -436,7 +553,7 @@ body {
 
 .tooltip-upgrade > span {
   font-weight: bold;
-  border-bottom: 1px dashed #000;
+  border-bottom: 1px dashed var(--light-color);
 }
 
 .boxUpgrade:hover .tooltip-upgrade {
@@ -463,11 +580,12 @@ li.item {
 
 .item > span {
   position: relative;
-  border-bottom: 1px dashed #000;
+  border-bottom: 1px dashed var(--light-color);
   left: -8px;
 }
 
 .bonusTooltip {
+  color: var(--light-color);
   height: 18px;
   font-size: 16px;
   font-weight: bold;
@@ -485,7 +603,6 @@ li.item {
   gap: 10px;
   flex-direction: column;
   border-radius: 2px;
-  border: 2px solid #333333;
   padding: 10px 8px;
   position: absolute;
   left: 0;
@@ -494,10 +611,11 @@ li.item {
   margin: auto;
   width: 400px;
   height: 200px;
-  background-color: #bdbebd;
+  background-color: var(--light-bg-color);
   border-radius: 2px;
-  border: 1px solid #313131;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   transition: opacity 0.1s;
   visibility: hidden;
 }
@@ -506,9 +624,11 @@ li.item {
   cursor: pointer;
   text-align: start;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  color: var(--light-color);
+  border: 1px solid var(--light-border-color);
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   width: 120px;
   font-size: 14px;
   font-weight: bold;
@@ -525,11 +645,13 @@ li.item {
   margin: auto;
   width: fit-content;
   font-size: 12px;
+  font-weight: bold;
   padding: 4px 8px;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
@@ -545,6 +667,16 @@ li.item {
   100% {
     opacity: 0;
   }
+}
+
+#delete {
+  position: absolute;
+  color: #b00;
+  border: 1px solid #900;
+  box-shadow: inset -1px -1px #900, inset 1px 1px #f00, inset -2px -2px #a00, inset 2px 2px #d00;
+  bottom: 10px;
+  width: 120px;
+  cursor: pointer;
 }
 
 #exit {
@@ -573,9 +705,10 @@ li.item {
   height: 280px;
   padding: 10px 8px;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  border: 1px solid var(--light-border-color);
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
 }
 
 .prompt > h3 {
@@ -584,15 +717,16 @@ li.item {
   margin: 0 auto;
   font-size: 16px;
   width: 75%;
-  border-bottom: 1px dashed #000;
+  border-bottom: 1px dashed var(--light-color);
   letter-spacing: 0.2rem;
 }
 
 .prompt > textarea {
   padding: 4px;
-  border: 1px solid #000;
+  border: 1px solid var(--light-border-color);
   border-radius: 2px;
-  background-color: silver;
+  color: var(--light-color);
+  background-color: var(--light-bg-color);
   font-size: 12px;
   font-weight: bold;
   height: 160px;
@@ -611,9 +745,11 @@ li.item {
 .promptBtnDiv > button {
   cursor: pointer;
   border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  color: var(--light-color);
+  border: 1px solid var(--light-border-color);
+  background: var(--light-bg-color);
+  box-shadow: inset -1px -1px var(--light-box-shadow1), inset 1px 1px var(--light-box-shadow2),
+    inset -2px -2px var(--light-box-shadow3), inset 2px 2px var(--light-box-shadow4);
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.1em;
@@ -694,7 +830,7 @@ li.item {
   }
 
   .tooltiptext {
-    margin-left: 30px;
+    margin-left: 46px;
     margin-bottom: 0px;
   }
 

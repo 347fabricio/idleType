@@ -1,6 +1,8 @@
+import { createNote } from "./script.js";
+
 let mainToggle = true;
 
-const showHideMain = () => {
+export const showHideMain = () => {
   const optionsElement = document.querySelector("#options");
   const bgOpacity = document.querySelector(".windows");
 
@@ -20,7 +22,7 @@ export function exit() {
   return false;
 }
 
-export const prompt = (index) => {
+const createWindowSave = () => {
   const div = document.createElement("div");
   const promptBtnDiv = document.createElement("div");
   const h3 = document.createElement("h3");
@@ -33,7 +35,7 @@ export const prompt = (index) => {
   promptBtnDiv.appendChild(doBtn);
   promptBtnDiv.appendChild(exitBtn);
   textArea.classList.add("promptTextArea");
-  doBtn.classList.add("doBtn");
+  doBtn.classList.add("doneBtn");
   exitBtn.classList.add("exitBtn");
   promptBtnDiv.classList.add("promptBtnDiv");
 
@@ -46,22 +48,25 @@ export const prompt = (index) => {
   document.querySelector("body").append(div);
 
   exitBtn.addEventListener("click", exitButton);
+};
 
+export const prompt = (index) => {
   switch (index) {
     case 1:
+      createWindowSave();
       getSave();
       exportSave();
       copyButton();
       break;
     case 2:
+      createWindowSave();
       importSave();
       break;
     case 3:
-      h3.innerText = "SAVE TO FILE";
-      console.log(index);
+      download();
       break;
     case 4:
-      h3.innerText = "IMPORT FROM FILE";
+      // h3.innerText = "IMPORT FROM FILE";
       console.log(index);
       break;
   }
@@ -78,15 +83,15 @@ const exitButton = () => {
 };
 
 const exportSave = () => {
-  document.querySelector(".doBtn").innerText = "Copy";
+  document.querySelector(".doneBtn").innerText = "Copy";
   document.querySelector(".prompt > h3").innerText = "EXPORT SAVE";
   document.querySelector(".promptTextArea").innerText = jsonToBase64(save);
 };
 
 const importSave = () => {
-  document.querySelector(".doBtn").innerText = "Done";
+  document.querySelector(".doneBtn").innerText = "Done";
   document.querySelector(".prompt > h3").innerText = "IMPORT SAVE";
-  document.querySelector(".doBtn").addEventListener("click", () => {
+  document.querySelector(".doneBtn").addEventListener("click", () => {
     const b64 = document.querySelector(".promptTextArea").value;
 
     try {
@@ -99,8 +104,30 @@ const importSave = () => {
   });
 };
 
-// -------------------------------------
+// download -------------------------------------
+function download() {
+  let element = document.createElement("a");
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(getSave()));
+  element.setAttribute("download", "typeSave.txt");
 
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+  createNote("The file has been downloaded.");
+}
+
+// deleteData -------------------------------------
+const deleteData = document.querySelector("#delete");
+deleteData.addEventListener("click", () => {
+  localStorage.removeItem("my");
+  location.reload();
+  console.log("deleted");
+});
+
+// save -------------------------------------
 let save = JSON.parse(localStorage.getItem("my")) || 0;
 
 const getSave = () => {
