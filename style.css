@@ -157,7 +157,7 @@ body {
 }
 
 .moneyWindow {
-  width: 260px;
+  width: 300px;
 }
 
 .upgradesWindow {
@@ -206,7 +206,7 @@ body {
   letter-spacing: 0.1em;
   justify-content: center;
   align-items: flex-end;
-  height: 33%;
+  height: 35%;
 }
 
 #word-here > span {

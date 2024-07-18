@@ -1,4 +1,4 @@
-import { start, words, input } from "./wordsList.js";
+import { task, words, input, setWord } from "./wordsList.js";
 import { getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
 import { options, exit, prompt } from "./options.js";
 import { showColorPicker } from "./colorPicker.js";
@@ -135,7 +135,7 @@ let acc = [
 ];
 
 // ================ START ================
-start();
+setWord();
 getScreenSize();
 
 // ================ KEYBOARDS EARNED BY TYPING ================
@@ -157,24 +157,59 @@ const showEarnings = (x) => {
 
 // ================ USER TYPING ================
 export let answer = "";
+let taskID = 0;
 
 const getUserInput = () => {
-  start(len);
   answer = input.value.trim();
-  if (answer == words.innerText) {
-    if (!isWritingChallengeActive) {
-      generateRandomNumbers();
-    }
-    showEarnings();
-    input.value = "";
-    keyboards += storeProducts[0].quantity;
-    showKeyboards.innerText = doIt(keyboards);
-  } else if (answer.length > words.innerText.length) {
-    input.value = "";
+  if (taskID <= 2) {
+    shit();
   }
 };
 
-input.addEventListener("keyup", getUserInput);
+function shit() {
+  if (answer == task[taskID]) {
+    if (!isWritingChallengeActive) {
+      generateRandomNumbers();
+    }
+    handleCorrectAnswer();
+  } else if (answer.length > task[taskID].length) {
+    clearInputField();
+  }
+}
+
+function handleCorrectAnswer() {
+  clearInputField();
+  dimCurrentWord();
+  updateKeyboardsCounter();
+  showEarnings();
+  incrementTaskID();
+  checkForWordReset();
+}
+
+function incrementTaskID() {
+  taskID++;
+}
+
+function clearInputField() {
+  input.value = "";
+}
+
+function dimCurrentWord() {
+  words[taskID].style.opacity = "0.2";
+}
+
+function updateKeyboardsCounter() {
+  keyboards += storeProducts[0].quantity;
+}
+
+function checkForWordReset() {
+  if (taskID == 3) {
+    setWord();
+    taskID = 0;
+  }
+}
+
+input.addEventListener("input", getUserInput);
 
 // ================ PRODUCTS ================
 let keyboardPerSecond = false;
@@ -184,7 +219,7 @@ let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-let keyboards = 0;
+let keyboards = 1000000;
 
 document.querySelectorAll(".product").forEach((product, index) => {
   product.addEventListener("click", () =>
@@ -222,7 +257,7 @@ const productClickerHandlerFirst = (index) => {
       enableProduction();
     }
   } else {
-    alert("You don't have keyboards enough.");
+    flashWarning(index);
   }
 };
 
@@ -248,9 +283,28 @@ const productClickerHandlerAll = (index) => {
       enableProduction();
     }
   } else {
-    alert("You don't have keyboards enough.");
+    flashWarning(index);
   }
 };
+
+function flashWarning(index) {
+  const target = document.querySelectorAll(".product-price")[index];
+  let toggle = true;
+
+  let blinkInterval = setInterval(() => {
+    if (toggle) {
+      target.style.color = "red";
+      showKeyboards.style.color = "red";
+      toggle = !toggle;
+    } else {
+      target.style.color = "initial";
+      showKeyboards.style.color = "initial";
+      toggle = !toggle;
+    }
+  }, 250);
+
+  setTimeout(() => clearInterval(blinkInterval), 1000);
+}
 
 // ================ VERIFYING AND SETTING UPGRADES ================
 
@@ -404,7 +458,6 @@ const createUpgrade = (productName, productIndex) => {
 
   checkAcc(productName, productIndex);
 };
-
 const checkAcc = (productName, productIndex) => {
   switch (productName) {
     case "keyboard":
@@ -574,14 +627,16 @@ const showReducedEarnings = () => {
 };
 
 const isAutoOn = () => {
-  start();
-  showReducedEarnings();
+  answer = input.value.trim();
+  if (answer == task[taskID]) {
+    handleCorrectAnswer();
+  }
 };
 
 let autoKeyboard = document.querySelector(".auto-keyboard > img");
 let isRunning = false;
 let active = false;
-let delay = 100; // AUTOKEYBOARD DELAY
+let delay = 10; // AUTOKEYBOARD DELAY
 
 // debounce handles call stack
 const debounce = (func, delay) => {
@@ -617,24 +672,27 @@ const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const typing = (i) => {
-  return sleep(delay).then(() => (input.value += word.innerText[i]));
+const typing = async (task, j) => {
+  return await sleep(delay).then(() => (input.value += task[j]));
 };
 
 const autoK = async () => {
   jegue: while (isRunning) {
-    for (let i = 0; i < word.innerText.length; i++) {
-      if (isRunning) {
-        await typing(i);
-      } else {
-        input.value = "";
-        break jegue;
+    for (let i = 0; i < words.length; i++) {
+      for (let j = 0; j < task[taskID].length; j++) {
+        if (isRunning) {
+          await typing(task[taskID], j);
+        } else {
+          input.value = "";
+          setWord();
+          taskID = 0;
+          break jegue;
+        }
       }
+      isAutoOn();
     }
-    isAutoOn();
   }
 };
-
 autoKeyboard.addEventListener("click", debouncedToggleAutoKeyboard);
 
 // ================ TYPING BONUS ================
@@ -744,9 +802,11 @@ const setData = (x) => {
         break;
       case 1:
         upgradesList = variable;
+        console.log(upgradesList);
         break;
       case 2:
         acc = variable;
+        console.log(acc);
         break;
       case 3:
         document.querySelector(".upgrades").outerHTML = variable;

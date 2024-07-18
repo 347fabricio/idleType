@@ -1,10 +1,15 @@
 export let words = document.querySelectorAll("#word-here > span");
 export let input = document.querySelector("#type-here");
+export let task = [];
 
-function setWord() {
+export function setWord() {
+  let temp = [];
   words.forEach((x) => {
-    x.innerHTML = wordList[Math.floor(Math.random() * wordList.length)];
+    x.innerText = wordList[Math.floor(Math.random() * wordList.length)];
+    temp.push(x.innerText);
+    x.style.opacity = "1";
   });
+  task = temp;
 }
 
 // document.querySelectorAll(".product").forEach((product, index) => {
@@ -12,10 +17,6 @@ function setWord() {
 //     index > 0 ? productClickerHandlerAll(index) : productClickerHandlerFirst(index)
 //   );
 // });
-
-export function start(len) {
-  setWord();
-}
 
 export const wordList = [
   "ability",
