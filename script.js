@@ -23,6 +23,7 @@ export let storeProducts = [
     cost: 100,
     baseCost: 100,
     own: 0,
+    ownBuffer: 0,
     produced: 0,
   },
   {
@@ -33,6 +34,7 @@ export let storeProducts = [
     cost: 1100,
     baseCost: 1100,
     own: 0,
+    ownBuffer: 0,
     produced: 0,
   },
   {
@@ -43,6 +45,7 @@ export let storeProducts = [
     cost: 12000,
     baseCost: 12000,
     own: 0,
+    ownBuffer: 0,
     produced: 0,
   },
   {
@@ -53,6 +56,7 @@ export let storeProducts = [
     cost: 130000,
     baseCost: 130000,
     own: 0,
+    ownBuffer: 0,
     produced: 0,
   },
   {
@@ -63,6 +67,7 @@ export let storeProducts = [
     cost: 1400000,
     baseCost: 1400000,
     own: 0,
+    ownBuffer: 0,
     produced: 0,
   },
 ];
@@ -72,7 +77,7 @@ let upgradesList = [
     name: "keyboard",
     chorume: [2, 2, 2],
     currentMultiplier: 0.1,
-    multiplier: [5, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20],
+    multiplier: [1, 5, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20],
     upgradeCost: [80, 400, 8000, 80000, 8000000, 800000000],
   },
   {
@@ -156,12 +161,43 @@ const showEarnings = (x) => {
 };
 
 // ================ USER TYPING ================
+// const debounce = (func, delay) => {
+//   let timeoutId;
+//   return () => {
+//     clearTimeout(timeoutId);
+//     timeoutId = setTimeout(func, delay);
+//   };
+// };
+// const debouncedToggleAutoKeyboard = debounce(toggleAutoKeyboard, 100);
+
 export let answer = "";
 let taskID = 0;
+let isWriting = false;
+let writingTimeout;
+let writingTime;
+let seconds = 0;
+let rightAnswers = 0;
+let wordsPerSecond = 0;
 
+function typingTimeoutHandler() {
+  clearTimeout(writingTimeout);
+  writingTimeout = setTimeout(() => {
+    isWriting = false;
+    writingTimeHandler();
+  }, 2000);
+
+  if (!writingTime) {
+    isWriting = true;
+    writingTime = setInterval(() => {
+      seconds++;
+    }, 1000);
+  }
+}
 const getUserInput = () => {
+  typingTimeoutHandler();
+
   answer = input.value.trim();
-  if (taskID <= 2) {
+  if (taskID <= 2 && !isRunning) {
     shit();
   }
 };
@@ -171,6 +207,7 @@ function shit() {
     if (!isWritingChallengeActive) {
       generateRandomNumbers();
     }
+    rightAnswers++;
     handleCorrectAnswer();
   } else if (answer.length > task[taskID].length) {
     clearInputField();
@@ -178,12 +215,17 @@ function shit() {
 }
 
 function handleCorrectAnswer() {
+  growFortune();
   clearInputField();
   dimCurrentWord();
-  updateKeyboardsCounter();
   showEarnings();
   incrementTaskID();
   checkForWordReset();
+}
+
+function growFortune() {
+  keyboards += storeProducts[0].quantity;
+  showKeyboards.innerText = doIt(keyboards);
 }
 
 function incrementTaskID() {
@@ -198,15 +240,51 @@ function dimCurrentWord() {
   words[taskID].style.opacity = "0.2";
 }
 
-function updateKeyboardsCounter() {
-  keyboards += storeProducts[0].quantity;
-}
-
 function checkForWordReset() {
   if (taskID == 3) {
+    wordsPerSecondHandler();
     setWord();
     taskID = 0;
   }
+}
+
+// ================ WRITING MULTIPLIER BONUS ================
+function writingTimeHandler() {
+  clearInterval(writingTime);
+  writingTime = false;
+  writingBonus();
+  wordsPerSecond = 0;
+  console.log("----------------------------");
+}
+
+function writingBonus() {
+  const calc = Math.round(storeProducts[0].quantity * wordsPerSecond);
+  console.log(storeProducts[0].quantity, wordsPerSecond);
+  // growFortune(calc);
+  keyboards += calc;
+  showKeyboards.innerText = doIt(keyboards);
+  showEarnings(calc);
+  console.log("bonus", calc);
+  writingBonusSpan(calc);
+}
+
+function wordsPerSecondHandler() {
+  console.log(`right answers: ${rightAnswers} -- seconds: ${seconds} = ${rightAnswers / seconds}`);
+  wordsPerSecond += rightAnswers / seconds;
+  seconds = 0;
+  rightAnswers = 0;
+  console.log("wordsPerSecond", wordsPerSecond.toFixed(2));
+}
+
+function writingBonusSpan(bonus) {
+  const span = document.createElement("span");
+  const inputSection = document.querySelector(".inputSection");
+  span.classList.add("writingBonus");
+  span.innerText = bonus;
+
+  inputSection.appendChild(span);
+
+  // setTimeout(() => span.remove(), 2000);
 }
 
 input.addEventListener("input", getUserInput);
@@ -214,12 +292,12 @@ input.addEventListener("input", getUserInput);
 // ================ PRODUCTS ================
 let keyboardPerSecond = false;
 let showMoneyPerSecond = false;
-let kUp = false;
+let addMultiplier = false;
 let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-let keyboards = 1000000;
+let keyboards = 0;
 
 document.querySelectorAll(".product").forEach((product, index) => {
   product.addEventListener("click", () =>
@@ -244,6 +322,7 @@ const productClickerHandlerFirst = (index) => {
     keyboards -= storeProducts[0].cost;
     showKeyboards.innerText = doIt(keyboards);
     storeProducts[0].own += 1;
+    storeProducts[0].ownBuffer += 1;
     storeProducts[0].level += 1;
     storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
 
@@ -268,9 +347,10 @@ const productClickerHandlerAll = (index) => {
     storeProducts[index].quantityPerSecond += storeProducts[index].multiplier;
     storeProducts[index].level += 1;
     storeProducts[index].own += 1;
+    storeProducts[index].ownBuffer += 1;
 
-    if (kUp) {
-      kUp();
+    if (addMultiplier) {
+      addMultiplier();
     }
 
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
@@ -297,8 +377,8 @@ function flashWarning(index) {
       showKeyboards.style.color = "red";
       toggle = !toggle;
     } else {
-      target.style.color = "initial";
-      showKeyboards.style.color = "initial";
+      target.style.color = "var(--light-color)";
+      showKeyboards.style.color = "var(--light-color)";
       toggle = !toggle;
     }
   }, 250);
@@ -458,6 +538,7 @@ const createUpgrade = (productName, productIndex) => {
 
   checkAcc(productName, productIndex);
 };
+
 const checkAcc = (productName, productIndex) => {
   switch (productName) {
     case "keyboard":
@@ -533,11 +614,13 @@ const nonCursor = (_, productIndex, exclusiveIndex, dataid) => {
     if (keyboards >= upgradesList[productIndex].upgradeCost[exclusiveIndex]) {
       keyboards -= upgradesList[productIndex].upgradeCost[exclusiveIndex];
       upgradesList[productIndex].upgradeCost.splice(exclusiveIndex, 1, false);
+      upgradesList[0].multiplier.splice(multIndex++, 1, false);
       showKeyboards.innerText = doIt(keyboards);
       document.querySelector(`[data-id="${dataid}"]`).remove();
 
-      enableK();
-      kUp();
+      console.log(storeProducts[0]);
+      enableK(productIndex);
+      addMultiplier();
     } else {
       alert("You don't have keyboards enough.");
     }
@@ -546,8 +629,12 @@ const nonCursor = (_, productIndex, exclusiveIndex, dataid) => {
   document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
 };
 
-const enableK = () => {
-  kUp = () => {
+const enableK = (productIndex) => {
+  activateMultiplier(productIndex);
+};
+
+function activateMultiplier(productIndex) {
+  addMultiplier = () => {
     totalOwn = getTotalOwn() - previousOwn;
 
     storeProducts[0].multiplier += totalOwn * upgradesList[0].currentMultiplier;
@@ -557,8 +644,12 @@ const enableK = () => {
 
     tempMultipler();
     previousOwn = getTotalOwn();
+    productTooltip(productIndex);
+    zeroOwnBuffers();
+    console.log(storeProducts[0]);
   };
-};
+}
+
 let totalOwn = 0;
 let previousOwn = 0;
 let tempMultiplier = 0;
@@ -585,7 +676,7 @@ const nonCursosMultiplier = (_, productIndex, exclusiveIndex, dataid) => {
           };
         }
 
-        kUp();
+        addMultiplier();
 
         storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
         moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
@@ -607,7 +698,7 @@ const getTotalOwn = () => {
 };
 
 function tempMultipler() {
-  tempMultiplier += totalOwn * upgradesList[0].currentMultiplier;
+  tempMultiplier += upgradesList[0].currentMultiplier * totalOwn;
 }
 
 // ================ AUTOKEYBOARD ================
@@ -629,14 +720,22 @@ const showReducedEarnings = () => {
 const isAutoOn = () => {
   answer = input.value.trim();
   if (answer == task[taskID]) {
-    handleCorrectAnswer();
+    growFortune();
+    clearInputField();
+    dimCurrentWord();
+    showEarnings();
+    incrementTaskID();
+    if (taskID == 3) {
+      setWord();
+      taskID = 0;
+    }
   }
 };
 
 let autoKeyboard = document.querySelector(".auto-keyboard > img");
 let isRunning = false;
 let active = false;
-let delay = 10; // AUTOKEYBOARD DELAY
+let delay = 100; // AUTOKEYBOARD DELAY
 
 // debounce handles call stack
 const debounce = (func, delay) => {
@@ -802,11 +901,9 @@ const setData = (x) => {
         break;
       case 1:
         upgradesList = variable;
-        console.log(upgradesList);
         break;
       case 2:
         acc = variable;
-        console.log(acc);
         break;
       case 3:
         document.querySelector(".upgrades").outerHTML = variable;
@@ -832,8 +929,49 @@ const loadDataFromLocalStorage = () => {
     getScreenSize();
     enableProduction();
     rebuildUpgrades();
+    isAddMultiplierActivate();
   }
 };
+
+function isAddMultiplierActivate() {
+  if (upgradesList[0].multiplier[0] == false) {
+    koko();
+  }
+}
+
+function koko() {
+  addMultiplier = () => {
+    totalOwnBuffer = getOwnBuffer();
+
+    storeProducts[0].multiplier += upgradesList[0].currentMultiplier * totalOwnBuffer;
+    storeProducts[0].quantity += upgradesList[0].currentMultiplier * totalOwnBuffer;
+    storeProducts[0].quantityPerSecond = storeProducts[0].ownBuffer * storeProducts[0].multiplier;
+    moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
+
+    tempBufferMultipler();
+    productTooltip(0);
+  };
+}
+
+let totalOwnBuffer = 0;
+let tempBufferMultiplier = 0;
+function getOwnBuffer() {
+  let buffer = storeProducts.reduce((x, y, z) => (z > 0 ? x + y.ownBuffer : 0), 0);
+  zeroOwnBuffers();
+  return buffer;
+}
+
+function zeroOwnBuffers() {
+  storeProducts.map((x, y) => {
+    if (y > 0) {
+      x.ownBuffer = 0;
+    }
+  });
+}
+
+function tempBufferMultipler() {
+  tempBufferMultiplier += upgradesList[0].currentMultiplier * totalOwn;
+}
 
 window.onload = loadDataFromLocalStorage();
 
@@ -889,7 +1027,7 @@ function nonCursor1(upgradeName, upgradeIndex, dataid) {
       document.querySelector(`[data-id="${dataid}"]`).remove();
 
       enableK(y);
-      kUp();
+      addMultiplier();
       productTooltip(y);
     } else {
       alert("You don't have keyboards enough.");
@@ -913,14 +1051,14 @@ function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
         upgradesList[0].multiplier.splice(multIndex++, 1, false);
         storeProducts[0].multiplier += getTotalOwn() * upgradesList[0].currentMultiplier;
 
-        if (tempMultiplier) {
-          storeProducts[0].multiplier -= tempMultiplier;
+        if (tempBufferMultipler()) {
+          storeProducts[0].multiplier -= tempBufferMultiplier;
           tempMultipler = () => {
-            tempMultiplier = "";
+            tempBufferMultiplier = "";
           };
         }
 
-        kUp();
+        addMultiplier();
         productTooltip(y);
 
         storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
