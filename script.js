@@ -195,7 +195,6 @@ function typingTimeoutHandler() {
 }
 const getUserInput = () => {
   typingTimeoutHandler();
-
   answer = input.value.trim();
   if (taskID <= 2 && !isRunning) {
     shit();
@@ -254,26 +253,30 @@ function writingTimeHandler() {
   writingTime = false;
   writingBonus();
   wordsPerSecond = 0;
-  console.log("----------------------------");
 }
 
 function writingBonus() {
-  const calc = Math.round(storeProducts[0].quantity * wordsPerSecond);
-  console.log(storeProducts[0].quantity, wordsPerSecond);
-  // growFortune(calc);
+  const calc = Math.round(wordsPerSecond * storeProducts[0].quantity);
   keyboards += calc;
   showKeyboards.innerText = doIt(keyboards);
-  showEarnings(calc);
-  console.log("bonus", calc);
-  writingBonusSpan(calc);
+  if (calc) {
+    showEarnings(calc);
+  }
+  removeWritingBonusSpan();
+}
+
+function removeWritingBonusSpan() {
+  const span = document.querySelector(".writingBonus");
+  if (span) {
+    span.remove();
+  }
 }
 
 function wordsPerSecondHandler() {
-  console.log(`right answers: ${rightAnswers} -- seconds: ${seconds} = ${rightAnswers / seconds}`);
   wordsPerSecond += rightAnswers / seconds;
   seconds = 0;
   rightAnswers = 0;
-  console.log("wordsPerSecond", wordsPerSecond.toFixed(2));
+  writingBonusSpan(`${storeProducts[0].quantity} * ${wordsPerSecond.toFixed(1)}`);
 }
 
 function writingBonusSpan(bonus) {
@@ -282,7 +285,13 @@ function writingBonusSpan(bonus) {
   span.classList.add("writingBonus");
   span.innerText = bonus;
 
-  inputSection.appendChild(span);
+  const oldSpan = document.querySelector(".writingBonus");
+  if (!oldSpan) {
+    inputSection.appendChild(span);
+  } else {
+    oldSpan.remove();
+    inputSection.appendChild(span);
+  }
 
   // setTimeout(() => span.remove(), 2000);
 }
@@ -336,7 +345,7 @@ const productClickerHandlerFirst = (index) => {
       enableProduction();
     }
   } else {
-    flashWarning(index);
+    flashWarningProduct(index);
   }
 };
 
@@ -363,11 +372,11 @@ const productClickerHandlerAll = (index) => {
       enableProduction();
     }
   } else {
-    flashWarning(index);
+    flashWarningProduct(index);
   }
 };
 
-function flashWarning(index) {
+function flashWarningProduct(index) {
   const target = document.querySelectorAll(".product-price")[index];
   let toggle = true;
 
@@ -378,6 +387,22 @@ function flashWarning(index) {
       toggle = !toggle;
     } else {
       target.style.color = "var(--light-color)";
+      showKeyboards.style.color = "var(--light-color)";
+      toggle = !toggle;
+    }
+  }, 250);
+
+  setTimeout(() => clearInterval(blinkInterval), 1000);
+}
+
+function flashWarningUpgrade() {
+  let toggle = true;
+
+  let blinkInterval = setInterval(() => {
+    if (toggle) {
+      showKeyboards.style.color = "red";
+      toggle = !toggle;
+    } else {
       showKeyboards.style.color = "var(--light-color)";
       toggle = !toggle;
     }
@@ -600,7 +625,7 @@ const doubleXp = (_, productIndex, exclusiveIndex, dataid) => {
 
       productTooltip(productIndex);
     } else {
-      alert("You don't have keyboards enough.");
+      flashWarningUpgrade();
     }
   };
 
@@ -622,7 +647,7 @@ const nonCursor = (_, productIndex, exclusiveIndex, dataid) => {
       enableK(productIndex);
       addMultiplier();
     } else {
-      alert("You don't have keyboards enough.");
+      flashWarningUpgrade();
     }
   };
 
@@ -683,7 +708,7 @@ const nonCursosMultiplier = (_, productIndex, exclusiveIndex, dataid) => {
 
         document.querySelector(`[data-id="${dataid}"]`).remove();
       } else {
-        alert("You don't have keyboards enough.");
+        flashWarningUpgrade();
       }
     } else {
       alert("You still can't do it");
@@ -732,6 +757,12 @@ const isAutoOn = () => {
   }
 };
 
+function isWritingChallengeOn() {
+  if (isWritingChallengeActive) {
+    storeProducts[0].quantity /= 2;
+  }
+}
+
 let autoKeyboard = document.querySelector(".auto-keyboard > img");
 let isRunning = false;
 let active = false;
@@ -776,6 +807,7 @@ const typing = async (task, j) => {
 };
 
 const autoK = async () => {
+  isWritingChallengeOn();
   jegue: while (isRunning) {
     for (let i = 0; i < words.length; i++) {
       for (let j = 0; j < task[taskID].length; j++) {
@@ -1009,7 +1041,7 @@ function doubleXP1(upgradeName, upgradeIndex, dataid) {
 
       productTooltip(y);
     } else {
-      alert("You don't have keyboards enough.");
+      flashWarningUpgrade();
     }
   };
 
@@ -1030,7 +1062,7 @@ function nonCursor1(upgradeName, upgradeIndex, dataid) {
       addMultiplier();
       productTooltip(y);
     } else {
-      alert("You don't have keyboards enough.");
+      flashWarningUpgrade();
     }
   };
 
@@ -1066,7 +1098,7 @@ function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
 
         document.querySelector(`[data-id="${dataid}"]`).remove();
       } else {
-        alert("You don't have keyboards enough.");
+        flashWarningUpgrade();
       }
     } else {
       alert("You still can't do it");
