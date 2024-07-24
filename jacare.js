@@ -1,7 +1,7 @@
 import { storeProducts } from "./script.js";
 
-export const getTax = (_, y) => {
-  storeProducts[y].cost = Math.ceil(storeProducts[y].baseCost * Math.pow(1.15, storeProducts[y].own));
+export const getTax = (index) => {
+  storeProducts[index].cost = Math.ceil(storeProducts[index].baseCost * Math.pow(1.15, storeProducts[index].own));
 };
 
 export const getQuantityPerSecond = () => {

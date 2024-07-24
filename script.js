@@ -1,7 +1,7 @@
 import { task, words, input, setWord } from "./wordsList.js";
 import { getTax, getQuantityPerSecond, produced, productTooltip, doIt } from "./jacare.js";
 import { options, exit, prompt } from "./options.js";
-import { showColorPicker } from "./colorPicker.js";
+import { showColorPicker } from "./darkLightTheme.js";
 
 export let storeProducts = [
   {
@@ -114,28 +114,22 @@ let upgradesList = [
 
 let acc = [
   {
-    id: 0,
-    dataid: 0,
+    dataid: [0, 0],
   },
   {
-    id: 0,
-    dataid: 16,
+    dataid: [0, 16],
   },
   {
-    id: 0,
-    dataid: 22,
+    dataid: [0, 22],
   },
   {
-    id: 0,
-    dataid: 28,
+    dataid: [0, 28],
   },
   {
-    id: 0,
-    dataid: 34,
+    dataid: [0, 34],
   },
   {
-    id: 0,
-    dataid: 40,
+    dataid: [0, 40],
   },
 ];
 
@@ -306,11 +300,11 @@ let flag = false;
 
 let moneyPerSecond = document.querySelector("#money-per-second span");
 let showKeyboards = document.querySelector("#money-quantity");
-let keyboards = 0;
+let keyboards = 10000000000000;
 
 document.querySelectorAll(".product").forEach((product, index) => {
-  product.addEventListener("click", () =>
-    index > 0 ? productClickerHandlerAll(index) : productClickerHandlerFirst(index)
+  product.addEventListener("click", ({ target }) =>
+    index > 0 ? productClickerHandlerAll(target) : productClickerHandlerFirst(target)
   );
 });
 
@@ -326,7 +320,10 @@ const enableProduction = () => {
   }, 1000);
 };
 
-const productClickerHandlerFirst = (index) => {
+const products = [...document.querySelectorAll(".product")];
+const productClickerHandlerFirst = (target) => {
+  const productIndex = products.indexOf(target.closest(".product"));
+
   if (keyboards >= storeProducts[0].cost) {
     keyboards -= storeProducts[0].cost;
     showKeyboards.innerText = doIt(keyboards);
@@ -336,43 +333,45 @@ const productClickerHandlerFirst = (index) => {
     storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
 
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
-    getTax(this, index);
+    getTax(productIndex);
     getScreenSize();
-    productTooltip(index);
-    verifyToSetUpgrade(this, index);
+    productTooltip(productIndex);
+    verifyToSetUpgrade(productIndex);
 
     if (!flag) {
       enableProduction();
     }
   } else {
-    flashWarningProduct(index);
+    flashWarningProduct(productIndex);
   }
 };
 
-const productClickerHandlerAll = (index) => {
-  if (keyboards >= storeProducts[index].cost) {
-    keyboards -= storeProducts[index].cost;
+const productClickerHandlerAll = (target) => {
+  const productIndex = products.indexOf(target.closest(".product"));
+
+  if (keyboards >= storeProducts[productIndex].cost) {
+    keyboards -= storeProducts[productIndex].cost;
     showKeyboards.innerText = doIt(keyboards);
-    storeProducts[index].quantityPerSecond += storeProducts[index].multiplier;
-    storeProducts[index].level += 1;
-    storeProducts[index].own += 1;
-    storeProducts[index].ownBuffer += 1;
+    storeProducts[productIndex].quantityPerSecond += storeProducts[productIndex].multiplier;
+    storeProducts[productIndex].level += 1;
+    storeProducts[productIndex].own += 1;
+    storeProducts[productIndex].ownBuffer += 1;
 
     if (addMultiplier) {
       addMultiplier();
     }
 
     moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
-    getTax(this, index);
+    getTax(productIndex);
     getScreenSize();
-    productTooltip(index);
-    verifyToSetUpgrade(this, index);
+    productTooltip(productIndex);
+    verifyToSetUpgrade(productIndex);
 
     if (!flag) {
       enableProduction();
     }
   } else {
-    flashWarningProduct(index);
+    flashWarningProduct(productIndex);
   }
 };
 
@@ -395,15 +394,33 @@ function flashWarningProduct(index) {
   setTimeout(() => clearInterval(blinkInterval), 1000);
 }
 
-function flashWarningUpgrade() {
+function flashWarningUpgrade(element) {
   let toggle = true;
 
   let blinkInterval = setInterval(() => {
     if (toggle) {
+      element.style.border = "2px solid red";
       showKeyboards.style.color = "red";
       toggle = !toggle;
     } else {
+      element.style.border = "1px solid var(--light-border-color)";
       showKeyboards.style.color = "var(--light-color)";
+      toggle = !toggle;
+    }
+  }, 250);
+
+  setTimeout(() => clearInterval(blinkInterval), 1000);
+}
+
+function EXCLUSIVE_flashWarning(element) {
+  let toggle = true;
+
+  let blinkInterval = setInterval(() => {
+    if (toggle) {
+      element.style.border = "2px solid red";
+      toggle = !toggle;
+    } else {
+      element.style.border = "1px solid var(--light-border-color)";
       toggle = !toggle;
     }
   }, 250);
@@ -413,15 +430,14 @@ function flashWarningUpgrade() {
 
 // ================ VERIFYING AND SETTING UPGRADES ================
 
-function verifyToSetUpgrade(_, index) {
-  let productIndex = +index;
+function verifyToSetUpgrade(productIndex) {
   let productLevel = storeProducts[productIndex].level;
   let productName = storeProducts[productIndex].name;
 
   switch (productIndex) {
     case 0:
       switch (productLevel) {
-        case 1:
+        case 1: // Keyboards
           createUpgrade(productName, productIndex);
           createUpgrade(productName, productIndex);
           break;
@@ -439,7 +455,7 @@ function verifyToSetUpgrade(_, index) {
           break;
       }
       break;
-    case 1:
+    case 1: // Assistants
       switch (productLevel) {
         case 1:
           createUpgrade(productName, productIndex);
@@ -458,7 +474,7 @@ function verifyToSetUpgrade(_, index) {
           break;
       }
       break;
-    case 2:
+    case 2: // Coffee Machines
       switch (productLevel) {
         case 1:
           createUpgrade(productName, productIndex);
@@ -474,7 +490,7 @@ function verifyToSetUpgrade(_, index) {
           break;
       }
       break;
-    case 3:
+    case 3: // Ergonomic Chairs
       switch (productLevel) {
         case 1:
           createUpgrade(productName, productIndex);
@@ -490,7 +506,7 @@ function verifyToSetUpgrade(_, index) {
           break;
       }
       break;
-    case 4:
+    case 4: // Text Editors
       switch (productLevel) {
         case 1:
           createUpgrade(productName, productIndex);
@@ -503,7 +519,7 @@ function verifyToSetUpgrade(_, index) {
           break;
       }
       break;
-    case 5:
+    case 5: // Speech to Text
       switch (productLevel) {
         case 1:
           createUpgrade(productName, productIndex);
@@ -527,28 +543,22 @@ const createUpgrade = (productName, productIndex) => {
 
   switch (productName) {
     case "keyboard":
-      div.id = acc[0].id;
-      div.dataset.id = acc[0].dataid;
+      div.dataset.id = `${acc[0].dataid[0]}, ${acc[0].dataid[1]}`;
       break;
     case "assistant":
-      div.id = acc[1].id;
-      div.dataset.id = acc[1].dataid;
+      div.dataset.id = `${acc[1].dataid[0]}, ${acc[1].dataid[1]}`;
       break;
     case "coffeeMachines":
-      div.id = acc[2].id;
-      div.dataset.id = acc[2].dataid;
+      div.dataset.id = `${acc[2].dataid[0]}, ${acc[2].dataid[1]}`;
       break;
     case "ergonomicChairs":
-      div.id = acc[3].id;
-      div.dataset.id = acc[3].dataid;
+      div.dataset.id = `${acc[3].dataid[0]}, ${acc[3].dataid[1]}`;
       break;
     case "textEditor":
-      div.id = acc[4].id;
-      div.dataset.id = acc[4].dataid;
+      div.dataset.id = `${acc[4].dataid[0]}, ${acc[4].dataid[1]}`;
       break;
     case "speechToText":
-      div.id = acc[5].id;
-      div.dataset.id = acc[5].dataid;
+      div.dataset.id = `${acc[5].dataid[0]}, ${acc[5].dataid[1]}`;
       break;
   }
 
@@ -568,90 +578,103 @@ const checkAcc = (productName, productIndex) => {
   switch (productName) {
     case "keyboard":
       switch (true) {
-        case acc[0].id < 3:
-          doubleXp(productName, productIndex, acc[0].id++, acc[0].dataid++);
+        case acc[0].dataid[1] < 3:
+          doubleXp(productIndex, acc[0].dataid[0]);
+          incrementData_ID(productIndex);
           break;
-        case acc[0].id == 3:
-          nonCursor(productName, productIndex, acc[0].id++, acc[0].dataid++);
+        case acc[0].dataid[1] == 3:
+          nonCursor(productIndex, acc[0].dataid[0]);
+          incrementData_ID(productIndex);
           break;
-        case acc[0].id > 3:
-          nonCursosMultiplier(productName, productIndex, acc[0].id++, acc[0].dataid++);
+        case acc[0].dataid[1] > 3:
+          nonCursosMultiplier(productIndex, acc[0].dataid[0]);
+          incrementData_ID(productIndex);
           break;
       }
       break;
 
     case "assistant":
-      doubleXp(productName, productIndex, acc[1].id++, acc[1].dataid++);
+      doubleXp(productIndex, acc[1].dataid[0]);
+      incrementData_ID(productIndex);
       break;
 
     case "coffeeMachines":
-      doubleXp(productName, productIndex, acc[2].id++, acc[2].dataid++);
+      doubleXp(productIndex, acc[2].dataid[0]);
+      incrementData_ID(productIndex);
       break;
 
     case "ergonomicChairs":
-      doubleXp(productName, productIndex, acc[3].id++, acc[3].dataid++);
+      doubleXp(productIndex, acc[3].dataid[0]);
+      incrementData_ID(productIndex);
       break;
 
     case "textEditor":
-      doubleXp(productName, productIndex, acc[4].id++, acc[4].dataid++);
+      doubleXp(productIndex, acc[4].dataid[0]);
+      incrementData_ID(productIndex);
       break;
 
     case "speechToText":
-      console.log();
-      doubleXp(productName, productIndex, acc[5].id++, acc[5].dataid++);
+      doubleXp(productIndex, acc[5].dataid[0]);
+      incrementData_ID(productIndex);
       break;
   }
 };
 
-const priceTooltip = (_, productIndex, exclusiveIndex, dataid) => {
-  let upgradeCost = upgradesList[productIndex].upgradeCost[exclusiveIndex];
-  document.querySelector(`[data-id="${+dataid}"] > .tooltip-upgrade > span`).innerText = doIt(upgradeCost);
+function incrementData_ID(index) {
+  acc[index].dataid[0]++;
+  acc[index].dataid[1]++;
+}
+
+const priceTooltip = (productIndex, id, data_ID) => {
+  let upgradeCost = upgradesList[productIndex].upgradeCost[id];
+  document.querySelector(`[data-id="${data_ID}"] > .tooltip-upgrade > span`).innerText = doIt(upgradeCost);
 };
 
-const doubleXp = (_, productIndex, exclusiveIndex, dataid) => {
-  priceTooltip(_, productIndex, exclusiveIndex, dataid);
+const doubleXp = (productIndex, id) => {
+  const data_ID = document.querySelector(`.upgrades`).lastChild.getAttribute("data-id");
+  priceTooltip(productIndex, id, data_ID);
 
   const foo = () => {
-    if (keyboards >= upgradesList[productIndex].upgradeCost[exclusiveIndex]) {
-      keyboards -= upgradesList[productIndex].upgradeCost[exclusiveIndex];
+    if (keyboards >= upgradesList[productIndex].upgradeCost[id]) {
+      keyboards -= upgradesList[productIndex].upgradeCost[id];
       showKeyboards.innerText = doIt(keyboards);
-      storeProducts[productIndex].quantity *= upgradesList[productIndex].chorume[exclusiveIndex];
-      storeProducts[productIndex].quantityPerSecond *= upgradesList[productIndex].chorume[exclusiveIndex];
-      storeProducts[productIndex].multiplier *= upgradesList[productIndex].chorume[exclusiveIndex];
-      upgradesList[productIndex].upgradeCost.splice(exclusiveIndex, 1, false);
-      upgradesList[productIndex].chorume.splice(exclusiveIndex, 1, false);
+      storeProducts[productIndex].quantity *= upgradesList[productIndex].chorume[id];
+      storeProducts[productIndex].quantityPerSecond *= upgradesList[productIndex].chorume[id];
+      storeProducts[productIndex].multiplier *= upgradesList[productIndex].chorume[id];
+      upgradesList[productIndex].upgradeCost.splice(id, 1, false);
+      upgradesList[productIndex].chorume.splice(id, 1, false);
       moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
-      document.querySelector(`[data-id="${dataid}"]`).remove();
 
+      document.querySelector(`[data-id="${data_ID}"]`).remove();
       productTooltip(productIndex);
     } else {
-      flashWarningUpgrade();
+      flashWarningUpgrade(`[data-id="${data_ID}"]`);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 };
 
-const nonCursor = (_, productIndex, exclusiveIndex, dataid) => {
-  priceTooltip(_, productIndex, exclusiveIndex, dataid);
+const nonCursor = (productIndex, id) => {
+  const data_ID = document.querySelector(`.upgrades`).lastChild.getAttribute("data-id");
+  priceTooltip(productIndex, id, data_ID);
 
   const foo = () => {
-    if (keyboards >= upgradesList[productIndex].upgradeCost[exclusiveIndex]) {
-      keyboards -= upgradesList[productIndex].upgradeCost[exclusiveIndex];
-      upgradesList[productIndex].upgradeCost.splice(exclusiveIndex, 1, false);
+    if (keyboards >= upgradesList[productIndex].upgradeCost[id]) {
+      keyboards -= upgradesList[productIndex].upgradeCost[id];
+      upgradesList[productIndex].upgradeCost.splice(id, 1, false);
       upgradesList[0].multiplier.splice(multIndex++, 1, false);
       showKeyboards.innerText = doIt(keyboards);
-      document.querySelector(`[data-id="${dataid}"]`).remove();
+      document.querySelector(`[data-id="${data_ID}"]`).remove();
 
-      console.log(storeProducts[0]);
       enableK(productIndex);
       addMultiplier();
     } else {
-      flashWarningUpgrade();
+      flashWarningUpgrade(`[data-id="${data_ID}"]`);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 };
 
 const enableK = (productIndex) => {
@@ -671,7 +694,6 @@ function activateMultiplier(productIndex) {
     previousOwn = getTotalOwn();
     productTooltip(productIndex);
     zeroOwnBuffers();
-    console.log(storeProducts[0]);
   };
 }
 
@@ -680,14 +702,15 @@ let previousOwn = 0;
 let tempMultiplier = 0;
 let multIndex = 0;
 
-const nonCursosMultiplier = (_, productIndex, exclusiveIndex, dataid) => {
-  priceTooltip(_, productIndex, exclusiveIndex, dataid);
+const nonCursosMultiplier = (productIndex, id) => {
+  const data_ID = document.querySelector(`.upgrades`).lastChild.getAttribute("data-id");
+  priceTooltip(productIndex, id, data_ID);
 
   const foo = () => {
-    if (!document.querySelector(`[data-id="${3}"]`)) {
-      if (keyboards >= upgradesList[0].upgradeCost[exclusiveIndex]) {
-        keyboards -= upgradesList[0].upgradeCost[exclusiveIndex];
-        upgradesList[0].upgradeCost.splice(exclusiveIndex, 1, false);
+    if (!document.querySelector(`[data-id="3, 3"]`)) {
+      if (keyboards >= upgradesList[0].upgradeCost[id]) {
+        keyboards -= upgradesList[0].upgradeCost[id];
+        upgradesList[0].upgradeCost.splice(id, 1, false);
         showKeyboards.innerText = doIt(keyboards);
 
         upgradesList[0].currentMultiplier *= upgradesList[0].multiplier[multIndex];
@@ -706,16 +729,17 @@ const nonCursosMultiplier = (_, productIndex, exclusiveIndex, dataid) => {
         storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
         moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
 
-        document.querySelector(`[data-id="${dataid}"]`).remove();
+        document.querySelector(`[data-id="${data_ID}"]`).remove();
       } else {
-        flashWarningUpgrade();
+        flashWarningUpgrade(`[data-id="${data_ID}"]`);
       }
     } else {
-      alert("You still can't do it");
+      const target = document.querySelector(`[data-id="3, 3"]`);
+      EXCLUSIVE_flashWarning(target);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 };
 
 const getTotalOwn = () => {
@@ -880,46 +904,44 @@ const generateRandomNumbers = () => {
 
 const rebuildUpgrades = () => {
   const upgrades = document.querySelector(".upgrades").childNodes;
-  findProduct();
+  initProductTooltips();
 
-  upgrades.forEach((x, y) => {
+  upgrades.forEach((x) => {
     let upgradeName = x.className.split(" ")[1];
-    let upgradeIndex = x.id;
     let dataid = x.getAttribute("data-id");
-
     switch (upgradeName) {
       case "keyboard":
         switch (true) {
-          case dataid < 3:
-            doubleXP1(upgradeName, upgradeIndex, dataid);
+          case dataid[0] < 3:
+            doubleXP1(upgradeName, dataid[0]);
             break;
-          case dataid == 3:
-            nonCursor1(upgradeName, upgradeIndex, dataid);
+          case dataid[0] == 3:
+            nonCursor1(upgradeName, dataid[0]);
             break;
-          case dataid > 3:
-            nonCursosMultiplier1(upgradeName, upgradeIndex, dataid);
+          case dataid[0] > 3:
+            nonCursosMultiplier1(upgradeName, dataid[0]);
             break;
         }
         break;
 
       case "assistant":
-        doubleXP1(upgradeName, upgradeIndex, dataid);
+        doubleXP1(upgradeName, dataid[0]);
         break;
 
       case "coffeeMachines":
-        doubleXP1(upgradeName, upgradeIndex, dataid);
+        doubleXP1(upgradeName, dataid[0]);
         break;
 
       case "ergonomicChairs":
-        doubleXP1(upgradeName, upgradeIndex, dataid);
+        doubleXP1(upgradeName, dataid[0]);
         break;
 
       case "textEditor":
-        doubleXP1(upgradeName, upgradeIndex, dataid);
+        doubleXP1(upgradeName, dataid[0]);
         break;
 
       case "speechToText":
-        doubleXP1(upgradeName, upgradeIndex, dataid);
+        doubleXP1(upgradeName, dataid[0]);
         break;
     }
   });
@@ -967,11 +989,11 @@ const loadDataFromLocalStorage = () => {
 
 function isAddMultiplierActivate() {
   if (upgradesList[0].multiplier[0] == false) {
-    koko();
+    applyMultiplier();
   }
 }
 
-function koko() {
+function applyMultiplier() {
   addMultiplier = () => {
     totalOwnBuffer = getOwnBuffer();
 
@@ -1014,7 +1036,7 @@ setInterval(() => {
 }, 45000);
 
 // ================ LOCALSTORAGE UPGRADES HANDLERS ================
-function findProduct() {
+function initProductTooltips() {
   document.querySelectorAll(".product").forEach((_, index) => {
     productTooltip(index);
   });
@@ -1024,59 +1046,63 @@ function findUpgrade(name) {
   return upgradesList.findIndex((upgrade) => upgrade.name === name);
 }
 
-function doubleXP1(upgradeName, upgradeIndex, dataid) {
-  const foo = () => {
-    let y = findUpgrade(upgradeName);
+function doubleXP1(upgradeName, id) {
+  const data_ID = document.querySelectorAll(`.upgrades > .${upgradeName}`)[id].getAttribute("data-id");
 
-    if (keyboards >= upgradesList[y].upgradeCost[upgradeIndex]) {
-      keyboards -= upgradesList[y].upgradeCost[upgradeIndex];
+  const foo = () => {
+    const idx = findUpgrade(upgradeName);
+
+    if (keyboards >= upgradesList[idx].upgradeCost[id]) {
+      keyboards -= upgradesList[idx].upgradeCost[id];
       showKeyboards.innerText = doIt(keyboards);
-      storeProducts[y].quantity *= upgradesList[y].chorume[upgradeIndex];
-      storeProducts[y].quantityPerSecond *= upgradesList[y].chorume[upgradeIndex];
-      storeProducts[y].multiplier *= upgradesList[y].chorume[upgradeIndex];
-      upgradesList[y].upgradeCost.splice(upgradeIndex, 1, false);
-      upgradesList[y].chorume.splice(upgradeIndex, 1, false);
+      storeProducts[idx].quantity *= upgradesList[idx].chorume[id];
+      storeProducts[idx].quantityPerSecond *= upgradesList[idx].chorume[id];
+      storeProducts[idx].multiplier *= upgradesList[idx].chorume[id];
+      upgradesList[idx].upgradeCost.splice(id, 1, false);
+      upgradesList[idx].chorume.splice(id, 1, false);
       moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
-      document.querySelector(`[data-id="${dataid}"]`).remove();
+      document.querySelector(`[data-id="${data_ID}"]`).remove();
 
-      productTooltip(y);
+      productTooltip(idx);
     } else {
-      flashWarningUpgrade();
+      const target = document.querySelector(`[data-id="${data_ID}"]`);
+      flashWarningUpgrade(target);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", () => foo());
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 }
 
-function nonCursor1(upgradeName, upgradeIndex, dataid) {
-  const foo = () => {
-    let y = findUpgrade(upgradeName);
+function nonCursor1(upgradeName, id) {
+  const data_ID = document.querySelectorAll(`.upgrades > .${upgradeName}`)[id].getAttribute("data-id");
 
-    if (keyboards >= upgradesList[0].upgradeCost[upgradeIndex]) {
-      keyboards -= upgradesList[0].upgradeCost[upgradeIndex];
-      upgradesList[0].upgradeCost.splice(upgradeIndex, 1, false);
+  const foo = () => {
+    const idx = findUpgrade(upgradeName);
+
+    if (keyboards >= upgradesList[0].upgradeCost[id]) {
+      keyboards -= upgradesList[0].upgradeCost[id];
+      upgradesList[0].upgradeCost.splice(id, 1, false);
       showKeyboards.innerText = doIt(keyboards);
-      document.querySelector(`[data-id="${dataid}"]`).remove();
+      document.querySelector(`[data-id="${data_ID}"]`).remove();
 
-      enableK(y);
+      enableK(idx);
       addMultiplier();
-      productTooltip(y);
     } else {
-      flashWarningUpgrade();
+      flashWarningUpgrade(`[data-id="${data_ID}"]`);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", () => foo());
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 }
 
-function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
-  const foo = () => {
-    let y = findUpgrade(upgradeName);
+function nonCursosMultiplier1(upgradeName, id) {
+  const data_ID = document.querySelectorAll(`.upgrades > .${upgradeName}`)[id].getAttribute("data-id");
 
-    if (!document.querySelector(`[data-id="${3}"]`)) {
-      if (keyboards >= upgradesList[0].upgradeCost[upgradeIndex]) {
-        keyboards -= upgradesList[0].upgradeCost[upgradeIndex];
-        upgradesList[0].upgradeCost.splice(upgradeIndex, 1, false);
+  const foo = () => {
+    if (!document.querySelector(`[data-id="3, 3"]`)) {
+      if (keyboards >= upgradesList[0].upgradeCost[id]) {
+        keyboards -= upgradesList[0].upgradeCost[id];
+        upgradesList[0].upgradeCost.splice(id, 1, false);
         showKeyboards.innerText = doIt(keyboards);
 
         upgradesList[0].currentMultiplier *= upgradesList[0].multiplier[multIndex];
@@ -1091,21 +1117,21 @@ function nonCursosMultiplier1(upgradeName, upgradeIndex, dataid) {
         }
 
         addMultiplier();
-        productTooltip(y);
 
         storeProducts[0].quantityPerSecond = storeProducts[0].multiplier * storeProducts[0].own;
         moneyPerSecond.innerText = `money/second: ${doIt(getQuantityPerSecond())}`;
 
-        document.querySelector(`[data-id="${dataid}"]`).remove();
+        document.querySelector(`[data-id="${data_ID}"]`).remove();
       } else {
-        flashWarningUpgrade();
+        flashWarningUpgrade(`[data-id="${data_ID}"]`);
       }
     } else {
-      alert("You still can't do it");
+      const target = document.querySelector(`[data-id="3, 3"]`);
+      EXCLUSIVE_flashWarning(target);
     }
   };
 
-  document.querySelector(`[data-id="${dataid}"]`).addEventListener("click", foo);
+  document.querySelector(`[data-id="${data_ID}"]`).addEventListener("click", foo);
 }
 
 // ================ notes ================

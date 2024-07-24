@@ -56,62 +56,8 @@ body {
 }
 
 .tips,
-.colorPicker > img {
+.darkLight > img {
   cursor: pointer;
-}
-
-.colorPickerWindow {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 26px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 25%;
-  margin: auto;
-  width: 320px;
-  height: 200px;
-  padding: 10px 8px;
-  border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
-}
-
-.colorPickerWindow > h3 {
-  width: 60%;
-  margin: 0 auto;
-  text-align: center;
-  border-bottom: 1px dashed #000;
-  font-size: 16px;
-  letter-spacing: 0.2rem;
-}
-
-.colorPickerWindow > input {
-  text-decoration: none;
-  width: 200px;
-  height: 80px;
-  margin: auto;
-}
-
-.colorPickerBtn {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-}
-
-.colorPickerBtn > button {
-  cursor: pointer;
-  border-radius: 2px;
-  border: 1px solid #313131;
-  background: silver;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.1em;
-  width: 60px;
-  padding: 2px 12px;
 }
 
 .windows {
